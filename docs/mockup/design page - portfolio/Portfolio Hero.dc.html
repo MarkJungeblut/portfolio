@@ -22,13 +22,13 @@
   @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: 0.4 } 50% { transform: translateY(7px); opacity: 1 } }
 </style>
 </helmet>
-<div style="display: grid; grid-template-columns: {{ cols }}; transition: grid-template-columns 0.7s cubic-bezier(0.65,0.05,0.36,1); background: #17130f; font-family: Barlow, 'Helvetica Neue', Helvetica, sans-serif; color: #f7f2ec;">
+<div style="position: relative; display: grid; grid-template-columns: {{ cols }}; transition: grid-template-columns 0.7s cubic-bezier(0.65,0.05,0.36,1); background: #17130f; font-family: Barlow, 'Helvetica Neue', Helvetica, sans-serif; color: #f7f2ec;">
 
   <header style="position: fixed; inset: 0 0 auto 0; z-index: 20; display: flex; justify-content: space-between; flex-direction: {{ headerWrap }}; align-items: {{ headerAlign }}; gap: {{ headerGap }}; padding: {{ headerPad }}; background: {{ headerBg }}; backdrop-filter: {{ headerBlur }}; transition: background 0.4s ease;">
     <a href="#home" style="display: flex; align-items: baseline; gap: 2px; font-size: {{ logoSize }}; font-weight: 200; letter-spacing: 0.14em; color: #ffffff;">
       <span style="color: #e8a05c;">M</span><span>ARK</span>
     </a>
-    <nav style="display: flex; align-items: center; flex-wrap: {{ navWrap }}; gap: {{ navGap }}; font-size: {{ navSize }}; font-weight: 400; letter-spacing: 0.06em;">
+    <nav style="display: {{ navShow }}; align-items: center; flex-wrap: {{ navWrap }}; gap: {{ navGap }}; font-size: {{ navSize }}; font-weight: 400; letter-spacing: 0.06em;">
       <a href="#home" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ homeColor }}; border-color: {{ homeRule }}; transition: color 0.3s ease, border-color 0.3s ease;" style-hover="color: #e8a05c;">Home</a>
       <a href="#profile" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ profileColor }}; border-color: {{ profileRule }}; transition: color 0.3s ease, border-color 0.3s ease;" style-hover="color: #e8a05c;">Profile</a>
       <a href="#skills" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ skillsColor }}; border-color: {{ skillsRule }}; transition: color 0.3s ease, border-color 0.3s ease;" style-hover="color: #e8a05c;">Skills</a>
@@ -36,12 +36,13 @@
       <a href="#contact" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ contactColor }}; border-color: {{ contactRule }}; transition: color 0.3s ease, border-color 0.3s ease;" style-hover="color: #e8a05c;">Contact</a>
       <a href="#" onClick="{{ openLegal }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ impressumColor }}; border-color: {{ impressumRule }}; transition: color 0.3s ease, border-color 0.3s ease;" style-hover="color: #e8a05c;">Impressum</a>
     </nav>
+    <a href="#" onClick="{{ openMenu }}" style="display: {{ menuBtnShow }}; align-items: center; gap: 10px; min-height: 44px; padding: 0 2px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #ffffff;">Menu<span style="display: flex; flex-direction: column; gap: 5px;"><span style="width: 20px; height: 1px; background: #e8a05c;"></span><span style="width: 14px; height: 1px; background: #ffffff; align-self: flex-end;"></span></span></a>
   </header>
 
-  <div style="position: relative; background: linear-gradient(160deg, #2a211a 0%, #1d1712 60%, #17130f 100%);">
+  <div style="position: relative; z-index: 1; min-width: 0; background: {{ colBg }};">
     <div style="position: absolute; inset: 0; opacity: 0.5; background: radial-gradient(120% 80% at 0% 100%, rgba(232,160,92,0.18) 0%, rgba(232,160,92,0) 60%);"></div>
 
-    <section id="home" data-sec="home" data-screen-label="Home" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: 100vh; padding: {{ textPad }};">
+    <section id="home" data-sec="home" data-screen-label="Home" style="position: relative; display: flex; flex-direction: column; justify-content: {{ homeJustify }}; min-height: {{ homeMinH }}; padding: {{ homePad }};">
       <div style="max-width: 520px;">
         <p style="margin: 0 0 26px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">Portfolio 2026</p>
         <h1 style="margin: 0; font-size: {{ h1Size }}; line-height: 1.16; font-weight: 200; letter-spacing: -0.01em; text-wrap: pretty; color: #ffffff;">
@@ -55,7 +56,7 @@
           <a href="#portfolio" style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.55); border-bottom: 1px solid rgba(247,242,236,0.24); padding-bottom: 3px;" style-hover="color: #e8a05c; border-color: #e8a05c;">See the work</a>
         </div>
       </div>
-      <div style="position: {{ socialPos }}; left: 56px; bottom: 40px; margin: {{ socialMargin }}; display: flex; gap: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.38);">
+      <div style="position: {{ socialPos }}; left: 56px; bottom: 40px; margin: {{ socialMargin }}; display: flex; gap: 26px; line-height: 2.6; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.38);">
         <a href="#" style-hover="color: #e8a05c;">GitHub</a>
         <a href="#" style-hover="color: #e8a05c;">LinkedIn</a>
         <a href="#contact" style-hover="color: #e8a05c;">Mail</a>
@@ -63,7 +64,7 @@
       <a href="#profile" style="align-self: flex-start; margin-top: 56px; display: {{ cueShow }}; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.5); animation: nudge 2.6s ease-in-out infinite;">↓ Scroll</a>
     </section>
 
-    <section id="profile" data-sec="profile" data-screen-label="Profile" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: 100vh; padding: {{ textPad }};">
+    <section id="profile" data-sec="profile" data-screen-label="Profile" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: {{ secMinH }}; padding: {{ textPad }};">
       <div style="max-width: 720px;">
         <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
           <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Profile
@@ -89,7 +90,7 @@
       </div>
     </section>
 
-    <section id="skills" data-sec="skills" data-screen-label="Skills" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: 100vh; padding: {{ textPad }};">
+    <section id="skills" data-sec="skills" data-screen-label="Skills" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: {{ secMinH }}; padding: {{ textPad }};">
       <div style="max-width: 760px;">
         <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
           <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Skills
@@ -116,39 +117,39 @@
       </div>
     </section>
 
-    <section id="portfolio" data-sec="portfolio" data-screen-label="Portfolio" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: 100vh; padding: {{ textPad }};">
+    <section id="portfolio" data-sec="portfolio" data-screen-label="Portfolio" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: {{ secMinH }}; padding: {{ textPad }};">
       <div style="max-width: 820px;">
         <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
           <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Portfolio
         </p>
         <h2 style="margin: 0 0 36px; font-size: {{ h2Size }}; line-height: 1.2; font-weight: 200; color: #ffffff; text-wrap: pretty;">Where I have been building</h2>
         <div style="display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">Since 2026</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Head of Backend Technologies</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Lufthansa Industry Solutions</span>
           </div>
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">Since 2025</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Solution Architect</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Operation Decision Support Suite</span>
           </div>
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">2020 — 2025</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Lead Developer</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">AVIATAR</span>
           </div>
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">2019 — 2020</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Full Stack Developer</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">AVIATAR</span>
           </div>
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">2015 — 2019</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Fullstack Developer</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Orgadata AG</span>
           </div>
-          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid rgba(247,242,236,0.16); border-bottom: 1px solid rgba(247,242,236,0.16);">
+          <div style="display: grid; grid-template-columns: {{ rowCols }}; align-items: baseline; gap: {{ rowGap }}; padding: {{ rowPad }}; border-top: 1px solid rgba(247,242,236,0.16); border-bottom: 1px solid rgba(247,242,236,0.16);">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #e8a05c;">2012 — 2015</span>
             <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Apprenticeship</span>
             <span style="display: {{ roleShow }}; font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Orgadata AG</span>
@@ -161,7 +162,7 @@
       </div>
     </section>
 
-    <section id="contact" data-sec="contact" data-screen-label="Contact" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: 100vh; padding: {{ textPad }};">
+    <section id="contact" data-sec="contact" data-screen-label="Contact" style="position: relative; display: flex; flex-direction: column; justify-content: {{ textCenter }}; min-height: {{ secMinH }}; padding: {{ textPad }};">
       <div style="max-width: 640px;">
         <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
           <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Contact
@@ -171,7 +172,7 @@
         <div style="display: grid; grid-template-columns: {{ pairCols }}; gap: 26px 40px; max-width: 520px;">
           <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Mail</span>
-            <a href="#" style="font-size: 17px; font-weight: 300; color: #ffffff;" style-hover="color: #e8a05c;">mark@jungeblut.dev</a>
+            <a href="#" style="display: flex; align-items: center; min-height: 32px; font-size: 17px; font-weight: 300; color: #ffffff;" style-hover="color: #e8a05c;">mark@jungeblut.dev</a>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">WhatsApp</span>
@@ -183,7 +184,7 @@
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Links</span>
-            <span style="display: flex; gap: 14px; font-size: 15px; font-weight: 300; color: #ffffff;"><a href="#" style-hover="color: #e8a05c;">GitHub</a><a href="#" style-hover="color: #e8a05c;">LinkedIn</a></span>
+            <span style="display: flex; gap: 22px; font-size: 15px; font-weight: 300; color: #ffffff;"><a href="#" style="display: flex; align-items: center; min-height: 32px;" style-hover="color: #e8a05c;">GitHub</a><a href="#" style="display: flex; align-items: center; min-height: 32px;" style-hover="color: #e8a05c;">LinkedIn</a></span>
           </div>
         </div>
         <a href="#" style="display: inline-block; margin-top: 40px; padding: 13px 26px; border: 1px solid rgba(255,255,255,0.5); font-size: 13.5px; letter-spacing: 0.05em; color: #ffffff; transition: all 0.22s ease;" style-hover="background: #e8a05c; border-color: #e8a05c; color: #17130f;">Say hello</a>
@@ -192,9 +193,9 @@
 
   </div>
 
-  <div style="position: {{ imgPos }}; top: 0; order: {{ imgOrder }}; align-self: start; height: {{ imgHeight }}; overflow: hidden; background: #2b231c;">
+  <div style="position: {{ imgPos }}; top: 0; left: 0; width: 100%; z-index: 0; order: {{ imgOrder }}; align-self: start; height: {{ imgHeight }}; overflow: hidden; background: #2b231c;">
     <img src="uploads/20260704-DSC03277.jpg" alt="Mark Jungeblut" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{ photoPos }}; filter: grayscale(1) contrast(1.06) brightness(0.92); transition: object-position 0.8s cubic-bezier(0.65,0.05,0.36,1);" />
-    <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,19,15,0.96) 0%, rgba(23,19,15,0.45) 22%, rgba(23,19,15,0.08) 55%, rgba(23,19,15,0.22) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: {{ imgShade }};"></div>
     <div style="position: absolute; inset: 0; transition: opacity 0.8s ease; opacity: {{ tintOpacity }}; background: linear-gradient(200deg, rgba(232,160,92,0.16) 0%, rgba(23,19,15,0.5) 100%);"></div>
   </div>
 </div>
@@ -219,10 +220,27 @@
         </div>
         <p style="margin: 34px 0 0; max-width: 520px; font-size: 13px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.42);">Platzhaltertext — bitte vor Veröffentlichung durch die echten Angaben und eine geprüfte Haftungs- sowie Datenschutzerklärung ersetzen.</p>
         </div>
+  <div style="position: fixed; inset: 0; z-index: 30; display: {{ menuShow }}; flex-direction: column; justify-content: space-between; padding: 18px 22px 36px; background: #17130f; font-family: Barlow, 'Helvetica Neue', Helvetica, sans-serif; color: #f7f2ec;">
+    <div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px;">
+      <a href="#home" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 2px; font-size: 24px; font-weight: 200; letter-spacing: 0.14em; color: #ffffff;"><span style="color: #e8a05c;">M</span><span>ARK</span></a>
+      <a href="#" onClick="{{ closeMenuPrevent }}" style="display: flex; align-items: center; min-height: 44px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.7);">Close ×</a>
+    </div>
+    <nav style="display: flex; flex-direction: column; gap: 4px;">
+      <a href="#home" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 18px; padding: 10px 0; font-size: 36px; font-weight: 200; color: {{ homeColor }};"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: rgba(232,160,92,0.8);">01</span>Home</a>
+      <a href="#profile" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 18px; padding: 10px 0; font-size: 36px; font-weight: 200; color: {{ profileColor }};"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: rgba(232,160,92,0.8);">02</span>Profile</a>
+      <a href="#skills" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 18px; padding: 10px 0; font-size: 36px; font-weight: 200; color: {{ skillsColor }};"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: rgba(232,160,92,0.8);">03</span>Skills</a>
+      <a href="#portfolio" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 18px; padding: 10px 0; font-size: 36px; font-weight: 200; color: {{ portfolioColor }};"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: rgba(232,160,92,0.8);">04</span>Portfolio</a>
+      <a href="#contact" onClick="{{ closeMenu }}" style="display: flex; align-items: baseline; gap: 18px; padding: 10px 0; font-size: 36px; font-weight: 200; color: {{ contactColor }};"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: rgba(232,160,92,0.8);">05</span>Contact</a>
+    </nav>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(247,242,236,0.14); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.55);">
+      <span style="display: flex; gap: 22px;"><a href="#" style="display: flex; align-items: center; min-height: 44px;">GitHub</a><a href="#" style="display: flex; align-items: center; min-height: 44px;">LinkedIn</a></span>
+      <a href="#" onClick="{{ menuToLegal }}" style="display: flex; align-items: center; min-height: 44px;">Impressum</a>
+    </div>
+  </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { section: 'home', legal: false, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+  state = { section: 'home', legal: false, menu: false, w: typeof window !== 'undefined' ? window.innerWidth : 390 };
 
   componentDidMount() {
     this._onResize = () => this.setState({ w: window.innerWidth });
@@ -261,6 +279,14 @@ class Component extends DCLogic {
     };
   }
 
+  setMenu(open, prevent) {
+    return (e) => {
+      if (prevent && e && e.preventDefault) e.preventDefault();
+      document.body.style.overflow = open ? 'hidden' : '';
+      this.setState({ menu: open });
+    };
+  }
+
   renderVals() {
     const s = this.state.section;
     const legal = this.state.legal;
@@ -287,6 +313,21 @@ class Component extends DCLogic {
       rule: legal ? 'rgba(232,160,92,0.8)' : 'transparent'
     };
     return {
+      openMenu: this.setMenu(true, true),
+      closeMenu: this.setMenu(false, false),
+      closeMenuPrevent: this.setMenu(false, true),
+      menuToLegal: (e) => { e.preventDefault(); document.body.style.overflow = 'hidden'; this.setState({ menu: false, legal: true }); },
+      menuShow: mobile && this.state.menu ? 'flex' : 'none',
+      menuBtnShow: mobile ? 'flex' : 'none',
+      navShow: mobile ? 'none' : 'flex',
+      colBg: mobile ? 'transparent' : 'linear-gradient(160deg, #2a211a 0%, #1d1712 60%, #17130f 100%)',
+      imgShade: mobile ? 'linear-gradient(180deg, rgba(23,19,15,0.55) 0%, rgba(23,19,15,0.05) 22%, rgba(23,19,15,0.35) 48%, rgba(23,19,15,0.92) 72%, #17130f 100%)' : 'linear-gradient(90deg, rgba(23,19,15,0.96) 0%, rgba(23,19,15,0.45) 22%, rgba(23,19,15,0.08) 55%, rgba(23,19,15,0.22) 100%)',
+      homeJustify: mobile ? 'flex-end' : 'center',
+      homeMinH: mobile ? '100svh' : '100vh',
+      homePad: mobile ? '96px 22px 36px' : '120px 48px 96px 56px',
+      secMinH: mobile ? 'auto' : '100vh',
+      rowGap: mobile ? '4px' : '20px',
+      rowPad: mobile ? '18px 0' : '22px 0',
       openLegal: this.setLegal(true),
       closeLegal: this.setLegal(false),
       legalShow: legal ? 'block' : 'none',
@@ -294,18 +335,18 @@ class Component extends DCLogic {
       legalWidth: mobile ? '100%' : 'min(680px, 54vw)',
       legalPad: mobile ? '76px 22px 48px' : '90px 64px 64px',
       mobile,
-      textPad: mobile ? '44px 22px 64px' : '120px 48px 96px 56px',
+      textPad: mobile ? '88px 22px 40px' : '120px 48px 96px 56px',
       textCenter: 'center',
-      h1Size: mobile ? '34px' : '52px',
+      h1Size: mobile ? '36px' : '52px',
       h2Size: mobile ? '27px' : '38px',
       bodySize: mobile ? '15.5px' : '16.5px',
       statCols: mobile ? '1fr' : 'repeat(3, minmax(0, 1fr))',
       pairCols: mobile ? '1fr' : 'repeat(2, minmax(0, 1fr))',
-      rowCols: mobile ? '104px 1fr' : '124px minmax(0, 1.7fr) minmax(0, 1fr)',
-      roleShow: mobile ? 'none' : 'block',
-      headerPad: mobile ? '18px 22px' : '30px 56px',
-      headerWrap: mobile ? 'column' : 'row',
-      headerAlign: mobile ? 'flex-start' : 'center',
+      rowCols: mobile ? '1fr' : '124px minmax(0, 1.7fr) minmax(0, 1fr)',
+      roleShow: 'block',
+      headerPad: mobile ? '12px 22px' : '30px 56px',
+      headerWrap: 'row',
+      headerAlign: 'center',
       headerGap: mobile ? '10px' : '32px',
       headerBg: home ? 'transparent' : 'rgba(23,19,15,0.82)',
       headerBlur: home ? 'none' : 'blur(14px)',
@@ -314,14 +355,14 @@ class Component extends DCLogic {
       navSize: mobile ? '12px' : '13.5px',
       navWrap: mobile ? 'wrap' : 'nowrap',
       socialPos: mobile ? 'static' : 'absolute',
-      socialMargin: mobile ? '44px 0 0' : '0',
+      socialMargin: mobile ? '20px 0 0' : '0',
       cueShow: mobile ? 'none' : 'block',
-      imgPos: mobile ? 'relative' : 'sticky',
+      imgPos: mobile ? 'absolute' : 'sticky',
       imgOrder: mobile ? -1 : 0,
-      imgHeight: mobile ? '46vh' : '100vh',
+      imgHeight: mobile ? '100svh' : '100vh',
       cols: mobile ? '1fr' : (wide[s] || wide.home),
-      photoPos: pos[s] || pos.home,
-      tintOpacity: home ? 0 : 0.55,
+      photoPos: mobile ? '50% 18%' : (pos[s] || pos.home),
+      tintOpacity: home || mobile ? 0 : 0.55,
       homeColor: n.home.color, homeRule: n.home.rule,
       profileColor: n.profile.color, profileRule: n.profile.rule,
       skillsColor: n.skills.color, skillsRule: n.skills.rule,
