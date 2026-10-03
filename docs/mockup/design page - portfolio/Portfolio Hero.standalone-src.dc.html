@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#17130f">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#17130f"/>
+    <rect x="480" y="0" width="720" height="800" fill="#3b322a"/>
+    <rect x="120" y="330" width="300" height="26" fill="#f7f2ec"/>
+    <rect x="120" y="382" width="220" height="26" fill="#e8a05c"/>
+    <rect x="120" y="460" width="150" height="46" fill="none" stroke="#f7f2ec" stroke-width="4"/>
+    <text x="120" y="150" font-family="Helvetica, sans-serif" font-size="86" font-weight="300" fill="#e8a05c">M</text>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #17130f; }
+  * { box-sizing: border-box; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #e8a05c; }
+  @keyframes caret { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+  @keyframes drift { 0% { transform: scale(1.06) translate3d(0,0,0) } 100% { transform: scale(1.12) translate3d(-1.5%, -1%, 0) } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+</style>
+</helmet>
+<div style="min-height: 100vh; display: grid; grid-template-columns: {{ cols }}; transition: grid-template-columns 0.7s cubic-bezier(0.65,0.05,0.36,1); background: #17130f; font-family: Barlow, 'Helvetica Neue', Helvetica, sans-serif; color: #f7f2ec; position: relative;">
+
+  <header style="position: absolute; inset: 0 0 auto 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 30px 56px;">
+    <a href="#" onClick="{{ goHome }}" style="display: flex; align-items: baseline; gap: 2px; font-size: 30px; font-weight: 200; letter-spacing: 0.14em; color: #ffffff;">
+      <span style="color: #e8a05c;">M</span><span>ARK</span>
+    </a>
+    <nav style="display: flex; align-items: center; gap: 30px; font-size: 13.5px; font-weight: 400; letter-spacing: 0.06em;">
+      <a href="#" onClick="{{ goHome }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ homeColor }}; border-color: {{ homeRule }};" style-hover="color: #e8a05c;">Home</a>
+      <a href="#" onClick="{{ goProfile }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ profileColor }}; border-color: {{ profileRule }};" style-hover="color: #e8a05c;">Profile</a>
+      <a href="#" onClick="{{ goSkills }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ skillsColor }}; border-color: {{ skillsRule }};" style-hover="color: #e8a05c;">Skills</a>
+      <a href="#" onClick="{{ goPortfolio }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ portfolioColor }}; border-color: {{ portfolioRule }};" style-hover="color: #e8a05c;">Portfolio</a>
+      <a href="#" onClick="{{ goContact }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ contactColor }}; border-color: {{ contactRule }};" style-hover="color: #e8a05c;">Contact</a>
+      <a href="#" onClick="{{ goImpressum }}" style="padding-bottom: 4px; border-bottom: 1px solid transparent; color: {{ impressumColor }}; border-color: {{ impressumRule }};" style-hover="color: #e8a05c;">Impressum</a>
+    </nav>
+  </header>
+
+  <section style="position: relative; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 96px 56px; background: linear-gradient(160deg, #2a211a 0%, #1d1712 60%, #17130f 100%);">
+    <div style="position: absolute; inset: 0; opacity: 0.5; background: radial-gradient(120% 80% at 0% 100%, rgba(232,160,92,0.18) 0%, rgba(232,160,92,0) 60%);"></div>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="position: relative; max-width: 520px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 26px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">Portfolio 2026</p>
+        <h1 style="margin: 0; font-size: 52px; line-height: 1.16; font-weight: 200; letter-spacing: -0.01em; text-wrap: pretty; color: #ffffff;">
+          I am Mark Jungeblut<br />and I am a <span style="color: #e8a05c; font-weight: 300;">Software Architect</span><span style="display: inline-block; width: 2px; height: 0.92em; margin-left: 4px; vertical-align: -0.08em; background: #ffffff; animation: caret 1.05s steps(1) infinite;"></span>
+        </h1>
+        <p style="margin: 26px 0 0; max-width: 400px; font-size: 16.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.66); text-wrap: pretty;">
+          I design systems end to end, from data model to interface, built robust and scalable enough to survive whatever the future ships next.
+        </p>
+        <div style="display: flex; align-items: center; gap: 18px; margin-top: 40px;">
+          <a href="#" onClick="{{ goProfile }}" style="padding: 13px 26px; border: 1px solid rgba(255,255,255,0.5); font-size: 13.5px; letter-spacing: 0.05em; color: #ffffff; transition: all 0.22s ease;" style-hover="background: #e8a05c; border-color: #e8a05c; color: #17130f;">Get to Know Me</a>
+          <a href="#" style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.55); border-bottom: 1px solid rgba(247,242,236,0.24); padding-bottom: 3px;" style-hover="color: #e8a05c; border-color: #e8a05c;">See the work</a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+      <div style="position: relative; max-width: 720px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
+          <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Profile
+        </p>
+        <h2 style="margin: 0; font-size: 40px; line-height: 1.2; font-weight: 200; letter-spacing: -0.01em; color: #ffffff; text-wrap: pretty;">Fifteen years of turning tangled requirements into systems teams can actually run.</h2>
+        <p style="margin: 24px 0 0; max-width: 560px; font-size: 16.5px; line-height: 1.75; font-weight: 300; color: rgba(247,242,236,0.66); text-wrap: pretty;">
+          I work across the whole stack — domain modelling, service boundaries, delivery pipelines, and the interface people finally touch. Most of my work starts as an audit and ends as an architecture that survives the next three roadmaps.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 46px; background: rgba(247,242,236,0.12);">
+          <div style="padding: 22px 24px; background: #1d1712;">
+            <p style="margin: 0; font-size: 30px; font-weight: 200; color: #e8a05c;">15+</p>
+            <p style="margin: 8px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.5);">Years shipping</p>
+          </div>
+          <div style="padding: 22px 24px; background: #1d1712;">
+            <p style="margin: 0; font-size: 30px; font-weight: 200; color: #e8a05c;">40+</p>
+            <p style="margin: 8px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.5);">Systems in production</p>
+          </div>
+          <div style="padding: 22px 24px; background: #1d1712;">
+            <p style="margin: 0; font-size: 30px; font-weight: 200; color: #e8a05c;">Remote</p>
+            <p style="margin: 8px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.5);">Germany · CET</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 18px; margin-top: 40px;">
+          <a href="#" style="padding: 13px 26px; border: 1px solid rgba(255,255,255,0.5); font-size: 13.5px; letter-spacing: 0.05em; color: #ffffff; transition: all 0.22s ease;" style-hover="background: #e8a05c; border-color: #e8a05c; color: #17130f;">Download CV</a>
+          <a href="#" onClick="{{ goHome }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.55); border-bottom: 1px solid rgba(247,242,236,0.24); padding-bottom: 3px;" style-hover="color: #e8a05c; border-color: #e8a05c;">Back to start</a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSkills }}" hint-placeholder-val="{{ false }}">
+      <div style="position: relative; max-width: 760px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
+          <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Skills
+        </p>
+        <h2 style="margin: 0 0 40px; font-size: 38px; line-height: 1.2; font-weight: 200; color: #ffffff; text-wrap: pretty;">The stack I reach for, and the parts I get called in to fix.</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 48px;">
+          <div style="display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 16px;">
+            <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8a05c;">Architecture</p>
+            <p style="margin: 0; font-size: 15.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.7);">Domain-driven design · event-driven systems · CQRS · API contracts · migration strategy</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 16px;">
+            <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8a05c;">Backend</p>
+            <p style="margin: 0; font-size: 15.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.7);">Java · Kotlin · Spring Boot · Node · PostgreSQL · Kafka · gRPC</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 16px;">
+            <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8a05c;">Frontend</p>
+            <p style="margin: 0; font-size: 15.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.7);">TypeScript · React · Next.js · design systems · accessibility</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 16px;">
+            <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #e8a05c;">Platform</p>
+            <p style="margin: 0; font-size: 15.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.7);">AWS · Kubernetes · Terraform · GitHub Actions · observability</p>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPortfolio }}" hint-placeholder-val="{{ false }}">
+      <div style="position: relative; max-width: 820px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
+          <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Portfolio
+        </p>
+        <h2 style="margin: 0 0 36px; font-size: 38px; line-height: 1.2; font-weight: 200; color: #ffffff; text-wrap: pretty;">Selected work</h2>
+        <div style="display: flex; flex-direction: column;">
+          <a href="#" style="display: grid; grid-template-columns: 76px 1fr 150px 26px; align-items: baseline; gap: 20px; padding: 20px 8px 20px 0; border-top: 1px solid rgba(247,242,236,0.16); transition: all 0.2s ease;" style-hover="background: rgba(232,160,92,0.07); padding-left: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: rgba(247,242,236,0.42);">2026</span>
+            <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Logistics control tower</span>
+            <span style="font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Lead architect</span>
+            <span style="color: #e8a05c; font-size: 16px;">→</span>
+          </a>
+          <a href="#" style="display: grid; grid-template-columns: 76px 1fr 150px 26px; align-items: baseline; gap: 20px; padding: 20px 8px 20px 0; border-top: 1px solid rgba(247,242,236,0.16); transition: all 0.2s ease;" style-hover="background: rgba(232,160,92,0.07); padding-left: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: rgba(247,242,236,0.42);">2025</span>
+            <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Insurance claims platform</span>
+            <span style="font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Modernisation</span>
+            <span style="color: #e8a05c; font-size: 16px;">→</span>
+          </a>
+          <a href="#" style="display: grid; grid-template-columns: 76px 1fr 150px 26px; align-items: baseline; gap: 20px; padding: 20px 8px 20px 0; border-top: 1px solid rgba(247,242,236,0.16); transition: all 0.2s ease;" style-hover="background: rgba(232,160,92,0.07); padding-left: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: rgba(247,242,236,0.42);">2024</span>
+            <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Retail checkout services</span>
+            <span style="font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Fullstack</span>
+            <span style="color: #e8a05c; font-size: 16px;">→</span>
+          </a>
+          <a href="#" style="display: grid; grid-template-columns: 76px 1fr 150px 26px; align-items: baseline; gap: 20px; padding: 20px 8px 20px 0; border-top: 1px solid rgba(247,242,236,0.16); border-bottom: 1px solid rgba(247,242,236,0.16); transition: all 0.2s ease;" style-hover="background: rgba(232,160,92,0.07); padding-left: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: rgba(247,242,236,0.42);">2023</span>
+            <span style="font-size: 21px; font-weight: 300; color: #ffffff;">Energy metering pipeline</span>
+            <span style="font-size: 13.5px; font-weight: 300; color: rgba(247,242,236,0.55);">Data architecture</span>
+            <span style="color: #e8a05c; font-size: 16px;">→</span>
+          </a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+      <div style="position: relative; max-width: 640px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
+          <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Contact
+        </p>
+        <h2 style="margin: 0; font-size: 38px; line-height: 1.2; font-weight: 200; color: #ffffff; text-wrap: pretty;">Got a system that needs untangling?</h2>
+        <p style="margin: 22px 0 40px; max-width: 480px; font-size: 16.5px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.66); text-wrap: pretty;">Two open slots for Q4. Architecture reviews, greenfield builds, or a second opinion before the rewrite.</p>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 40px; max-width: 520px;">
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Mail</span>
+            <a href="#" style="font-size: 17px; font-weight: 300; color: #ffffff;" style-hover="color: #e8a05c;">mark@jungeblut.dev</a>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Phone</span>
+            <span style="font-size: 17px; font-weight: 300; color: #ffffff;">+49 151 000 000</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Based in</span>
+            <span style="font-size: 17px; font-weight: 300; color: #ffffff;">Germany · CET</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(247,242,236,0.16); padding-top: 14px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,242,236,0.45);">Elsewhere</span>
+            <span style="display: flex; gap: 14px; font-size: 15px; font-weight: 300; color: #ffffff;"><a href="#" style-hover="color: #e8a05c;">GitHub</a><a href="#" style-hover="color: #e8a05c;">LinkedIn</a></span>
+          </div>
+        </div>
+        <a href="#" style="display: inline-block; margin-top: 40px; padding: 13px 26px; border: 1px solid rgba(255,255,255,0.5); font-size: 13.5px; letter-spacing: 0.05em; color: #ffffff; transition: all 0.22s ease;" style-hover="background: #e8a05c; border-color: #e8a05c; color: #17130f;">Book an intro call</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isImpressum }}" hint-placeholder-val="{{ false }}">
+      <div style="position: relative; max-width: 660px; animation: rise 0.6s ease both;">
+        <p style="margin: 0 0 22px; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(232,160,92,0.95);">
+          <span style="width: 34px; height: 1px; background: rgba(232,160,92,0.6);"></span>Impressum
+        </p>
+        <h2 style="margin: 0 0 34px; font-size: 32px; line-height: 1.25; font-weight: 200; color: #ffffff;">Angaben gemäß § 5 TMG</h2>
+        <div style="display: grid; grid-template-columns: 170px 1fr; gap: 16px 28px; font-size: 15px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.72);">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.45); padding-top: 4px;">Anbieter</span>
+          <span>Mark Jungeblut<br />Musterstraße 1<br />00000 Musterstadt, Deutschland</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.45); padding-top: 4px;">Kontakt</span>
+          <span>mark@jungeblut.dev<br />+49 151 000 000</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.45); padding-top: 4px;">USt-IdNr.</span>
+          <span>DE000000000</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,242,236,0.45); padding-top: 4px;">Verantwortlich</span>
+          <span>Mark Jungeblut, Adresse wie oben</span>
+        </div>
+        <p style="margin: 34px 0 0; max-width: 520px; font-size: 13px; line-height: 1.7; font-weight: 300; color: rgba(247,242,236,0.42);">Platzhaltertext — bitte vor Veröffentlichung durch die echten Angaben und eine geprüfte Haftungs- sowie Datenschutzerklärung ersetzen.</p>
+      </div>
+    </sc-if>
+
+    <div style="position: absolute; left: 56px; bottom: 40px; display: flex; gap: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,242,236,0.38);">
+      <a href="#" style-hover="color: #e8a05c;">GitHub</a>
+      <a href="#" style-hover="color: #e8a05c;">LinkedIn</a>
+      <a href="#" style-hover="color: #e8a05c;">Mail</a>
+    </div>
+  </section>
+
+  <section style="position: relative; overflow: hidden; background: #2b231c;">
+    <img src="uploads/20260704-DSC03277.jpg" alt="Mark Jungeblut" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{ photoPos }}; filter: grayscale(1) contrast(1.06) brightness(0.92); transition: object-position 0.8s cubic-bezier(0.65,0.05,0.36,1);" />
+    <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,19,15,0.96) 0%, rgba(23,19,15,0.45) 22%, rgba(23,19,15,0.08) 55%, rgba(23,19,15,0.22) 100%);"></div>
+    <div style="position: absolute; inset: 0; transition: opacity 0.8s ease; opacity: {{ tintOpacity }}; background: linear-gradient(200deg, rgba(232,160,92,0.16) 0%, rgba(23,19,15,0.5) 100%);"></div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { section: 'home' };
+  go(section) {
+    return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ section }); };
+  }
+  renderVals() {
+    const s = this.state.section;
+    const home = s === 'home';
+    // image column never narrows past 380px so the portrait stays readable
+    const wide = {
+      home: '1fr minmax(380px, 60%)',
+      profile: '1fr minmax(380px, 40%)',
+      skills: '1fr minmax(380px, 36%)',
+      portfolio: '1fr minmax(380px, 32%)',
+      contact: '1fr minmax(380px, 44%)',
+      impressum: '1fr minmax(380px, 34%)'
+    };
+    const pos = { home: '48% 22%', profile: '52% 20%', skills: '54% 18%', portfolio: '56% 16%', contact: '50% 21%', impressum: '56% 16%' };
+    const nav = (k) => ({
+      color: s === k ? '#e8a05c' : 'rgba(255,255,255,0.82)',
+      rule: s === k ? 'rgba(232,160,92,0.8)' : 'transparent'
+    });
+    const n = { home: nav('home'), profile: nav('profile'), skills: nav('skills'), portfolio: nav('portfolio'), contact: nav('contact'), impressum: nav('impressum') };
+    return {
+      isHome: home,
+      isProfile: s === 'profile',
+      isSkills: s === 'skills',
+      isPortfolio: s === 'portfolio',
+      isContact: s === 'contact',
+      isImpressum: s === 'impressum',
+      goHome: this.go('home'),
+      goProfile: this.go('profile'),
+      goSkills: this.go('skills'),
+      goPortfolio: this.go('portfolio'),
+      goContact: this.go('contact'),
+      goImpressum: this.go('impressum'),
+      cols: wide[s] || wide.home,
+      photoPos: pos[s] || pos.home,
+      tintOpacity: home ? 0 : 0.55,
+      homeColor: n.home.color, homeRule: n.home.rule,
+      profileColor: n.profile.color, profileRule: n.profile.rule,
+      skillsColor: n.skills.color, skillsRule: n.skills.rule,
+      portfolioColor: n.portfolio.color, portfolioRule: n.portfolio.rule,
+      contactColor: n.contact.color, contactRule: n.contact.rule,
+      impressumColor: n.impressum.color, impressumRule: n.impressum.rule
+    };
+  }
+}
+</script>
+</body>
+</html>
