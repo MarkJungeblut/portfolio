@@ -1,0 +1,25 @@
+# Claude Code local state
+# settings.local.json holds machine-specific permission grants — it is written
+# automatically and should never be committed.
+.claude/settings.local.json
+
+# Transient plan for the increment currently being implemented. Written by
+# /plan before implementation, read by /review-implementation, deleted once
+# archived to docs/plans/NNNN-<slug>.md. The archive is the durable record.
+docs/plans/current-plan.md
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

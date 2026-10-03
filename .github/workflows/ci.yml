@@ -1,0 +1,52 @@
+# Enforces the Definition of Done from docs/guidelines/ai-collaboration.md.
+#
+# TEMPLATE: every gate below is a placeholder. Replace the `run:` lines with
+# this project's real commands (the ones recorded in CLAUDE.md's commands
+# table). Until you do, the job succeeds with a warning annotation rather than
+# reporting green on checks that never ran.
+#
+# If the project has more than one layer with different toolchains, either add
+# a matrix over the layers or give each its own job.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Cancel superseded runs on the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Definition of Done
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # TEMPLATE: add the language setup your project needs, e.g.
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 22
+      #     cache: npm
+      # - run: npm ci
+
+      - name: Build
+        run: echo "::warning title=CI not configured::Replace the Build step in .github/workflows/ci.yml"
+
+      - name: Typecheck
+        run: echo "::warning title=CI not configured::Replace the Typecheck step in .github/workflows/ci.yml"
+
+      - name: Test
+        run: echo "::warning title=CI not configured::Replace the Test step in .github/workflows/ci.yml"
+
+      - name: Lint
+        run: echo "::warning title=CI not configured::Replace the Lint step in .github/workflows/ci.yml"
+
+      - name: Format check
+        run: echo "::warning title=CI not configured::Replace the Format check step in .github/workflows/ci.yml"

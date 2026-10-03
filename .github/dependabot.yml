@@ -1,0 +1,18 @@
+version: 2
+
+# TEMPLATE: add an ecosystem block for this project's package manager
+# (npm, pip, gomod, maven, …) alongside the two below.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: chore
+
+  - package-ecosystem: devcontainers
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: chore

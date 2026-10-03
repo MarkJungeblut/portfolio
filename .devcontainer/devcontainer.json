@@ -1,0 +1,60 @@
+// .devcontainer/devcontainer.json
+//
+// Stack-agnostic base image — add a language-specific feature (node, python,
+// go, etc.) per project rather than baking one in here, so this file works
+// unchanged across projects.
+{
+  "name": "dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    // Required by the claude-code feature below if the base image has no
+    // Node.js. Safe to remove if your chosen base/language feature already
+    // provides Node (e.g. a javascript-node or typescript-node image).
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  // Local VS Code / devcontainer CLI only: pre-create the host-side paths
+  // below so Docker bind-mounts them as-is. Without this, a source path
+  // that doesn't exist yet gets created by Docker as a directory — which
+  // is wrong for the ~/.claude.json file mount and silently breaks it.
+  // Runs on the host, not in the container.
+  "initializeCommand": "mkdir -p \"$HOME/.claude\" \"$HOME/.config/gh\" && touch \"$HOME/.claude.json\"",
+  // Reuse your host's gh and Claude Code auth instead of logging in fresh
+  // inside every container rebuild. Comment out any line for state you'd
+  // rather keep container-local. Local VS Code/devcontainer CLI only —
+  // has no effect in Codespaces (no shared host filesystem there; use the
+  // "secrets" block below instead).
+  //
+  // Note that the ~/.claude mount shares the whole directory, not just
+  // credentials: session transcripts under projects/, memory, and your user
+  // settings and skills from every other repo are visible inside this
+  // container, and changes made here write back to the host. That's usually
+  // what you want. If it isn't, drop that line and log in per container.
+  "mounts": [
+    "source=${localEnv:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+  ],
+  // Codespaces-only: prompts for this and injects it as an env var. Claude
+  // Code picks up API-key auth from the environment automatically, so no
+  // interactive login step is needed there. Ignored by local VS Code/
+  // devcontainer CLI builds, where the bind mounts above handle persistence
+  // instead.
+  "secrets": {
+    "ANTHROPIC_API_KEY": {
+      "description": "Anthropic API key for Claude Code CLI",
+      "documentationUrl": "https://console.anthropic.com/settings/keys"
+    }
+  },
+  "postCreateCommand": "gh --version && claude --version",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.vscode-pull-request-github",
+        "anthropic.claude-code"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}
