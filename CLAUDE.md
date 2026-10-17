@@ -87,16 +87,17 @@ is for.
 
 The Definition of Done depends on these. Node `^24.15` is required by Angular 22.
 
-| Task | Command |
-|------|---------|
-| Install | `npm ci` |
-| Dev server | `npx nx serve digital-portfolio` |
-| Build | `npx nx run-many -t build` |
-| Test | `npx nx run-many -t test` |
-| Single test | `npx nx test <project> --filter=<pattern>` |
-| Typecheck | `npx nx run-many -t typecheck` |
-| Lint | `npx nx run-many -t lint` |
-| Format | `npx nx format:write` (check: `npx nx format:check`) |
+| Task | Command | npm script |
+|------|---------|------------|
+| Install | `npm ci` | |
+| Dev server | `npx nx serve digital-portfolio` | `npm start` |
+| Build | `npx nx run-many -t build` | `npm run build` |
+| Test | `npx nx run-many -t test` | `npm test` |
+| Single test | `npx nx test <project> --filter=<pattern>` | |
+| Typecheck | `npx nx run-many -t typecheck` | `npm run typecheck` |
+| Lint | `npx nx run-many -t lint` | `npm run lint` |
+| Format | `npx nx format:write` (check: `npx nx format:check`) | `npm run format` (check: `npm run format:check`) |
+| Whole Definition of Done | `npx nx run-many -t build typecheck lint test && npx nx format:check` | `npm run verify` |
 
 `--filter` applies to apps and libs. The tooling project runs plain Vitest:
 `npx nx test spec-test-target -- -t <pattern>`.

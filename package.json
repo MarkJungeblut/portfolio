@@ -3,7 +3,16 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "nx serve digital-portfolio",
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "typecheck": "nx run-many -t typecheck",
+    "lint": "nx run-many -t lint",
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+    "verify": "nx run-many -t build typecheck lint test && nx format:check"
+  },
   "devDependencies": {
     "@angular-devkit/core": "~22.2.3",
     "@angular-devkit/schematics": "~22.2.3",
