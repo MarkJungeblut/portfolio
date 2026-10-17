@@ -1,0 +1,23 @@
+{
+  "name": "spec-test-target",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/nx-plugins/spec-test-target",
+  "projectType": "library",
+  "tags": ["type:tool"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default"],
+      "options": {
+        "command": "vitest run",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "options": {
+        "command": "tsc --noEmit -p {projectRoot}/tsconfig.json"
+      }
+    }
+  }
+}

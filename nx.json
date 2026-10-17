@@ -47,15 +47,6 @@
         "{workspaceRoot}/tools/eslint-rules/**/*"
       ]
     },
-    "@angular/build:unit-test": {
-      "cache": true,
-      "inputs": ["default", "^production"],
-      "options": {
-        "buildTarget": "digital-portfolio:build:development",
-        "tsConfig": "{projectRoot}/tsconfig.spec.json",
-        "watch": false
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "cache": true,
@@ -74,6 +65,12 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "./tools/nx-plugins/spec-test-target/index.ts",
+      "options": {
+        "buildTarget": "digital-portfolio:build:development"
       }
     }
   ]

@@ -50,6 +50,8 @@ libs/
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
   utils/                type:util    — framework-agnostic helpers
+tools/
+  nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
 The app is `digital-portfolio`, not `portfolio`, so that `libs/features/portfolio`
@@ -107,15 +109,14 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
   is plain HTML — there is no server bundle, and none should be added.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
-  `@nx/angular` only allows Angular's official runner on buildable libs, so a
-  `targetDefaults` entry in `nx.json` points `@angular/build:unit-test` at the
-  app's development build instead.
-- **Adding the first spec to a project:** create `tsconfig.spec.json`
-  (`types: ["vitest/globals"]`, `include: ["src/**/*.spec.ts"]`) and add
-  `"test": { "executor": "@angular/build:unit-test" }` to its `project.json`.
-  Projects have no `test` target until then, because the builder fails on
-  zero specs. Specs are type-checked by the test run; `typecheck` covers
-  non-spec sources only.
+  `@nx/angular` only allows Angular's official runner on buildable libs, so
+  tests borrow the app's development build config instead.
+- **`test` targets are inferred, never hand-written.** The local plugin
+  `tools/nx-plugins/spec-test-target` gives an app or lib a `test` target
+  (`@angular/build:unit-test`) exactly when it contains `src/**/*.spec.ts` —
+  the builder fails on zero specs, so the target can't exist everywhere. Just
+  write the spec; it runs. Specs are type-checked by the test run;
+  `typecheck` covers non-spec sources only.
 
 ## The design is the spec
 

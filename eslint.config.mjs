@@ -43,6 +43,10 @@ export default [
               sourceTag: 'type:util',
               onlyDependOnLibsWithTags: ['type:util'],
             },
+            {
+              sourceTag: 'type:tool',
+              onlyDependOnLibsWithTags: ['type:util'],
+            },
           ],
         },
       ],
