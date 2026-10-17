@@ -30,6 +30,8 @@ Examples: `feat/task-list-api`, `fix/auth-token-expiry`, `chore/update-dependenc
 - Summary is imperative, lowercase, no trailing period, max 72 chars.
 - Body explains *why*, not *what*.
 - Footer references issues: `Closes #42`, `Refs #17`.
+- No AI attribution: never add `Co-Authored-By: Claude …` trailers to commits
+  or "Generated with Claude Code" lines to PR descriptions.
 
 Examples:
 ```
