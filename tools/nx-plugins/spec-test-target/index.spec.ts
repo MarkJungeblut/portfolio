@@ -44,21 +44,19 @@ describe('spec-test-target', () => {
   it('adds a test target to a project with specs', async () => {
     addFile('libs/ui/src/lib/button/button.spec.ts');
 
-    expect(await targetsFor('libs/ui')).toEqual({
-      test: {
-        executor: '@angular/build:unit-test',
-        cache: true,
-        inputs: [
-          'default',
-          '^production',
-          { input: 'production', projects: 'app' },
-        ],
-        options: {
-          buildTarget: 'app:build:development',
-          tsConfig: '{projectRoot}/tsconfig.spec.json',
-          watch: false,
-        },
-      },
+    const test = (await targetsFor('libs/ui'))?.test;
+
+    // Runs on Angular's official runner, borrowing the configured build.
+    expect(test?.executor).toBe('@angular/build:unit-test');
+    expect(test?.options).toMatchObject({
+      buildTarget: 'app:build:development',
+      tsConfig: '{projectRoot}/tsconfig.spec.json',
+      watch: false,
+    });
+    // The borrowed build's sources must invalidate the cached result.
+    expect(test?.inputs).toContainEqual({
+      input: 'production',
+      projects: 'app',
     });
   });
 

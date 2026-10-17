@@ -31,16 +31,20 @@ Then open http://localhost:4200.
 | Lint        | `npx nx run-many -t lint`                            |
 | Format      | `npx nx format:write` (check: `npx nx format:check`) |
 
+`--filter` applies to apps and libs. The tooling project runs plain Vitest:
+`npx nx test spec-test-target -- -t <pattern>`.
+
 The static site is written to `dist/apps/digital-portfolio/browser`.
 
 ## Workspace
 
 ```
-apps/digital-portfolio   the app shell
-libs/features/*          one library per page section, plus the Impressum
-libs/data                portfolio content and its types
-libs/ui                  presentational components
-libs/utils               framework-agnostic helpers
+apps/digital-portfolio   type:app      the app shell
+libs/features/*          type:feature  one library per page section, plus the Impressum
+libs/data                type:data     portfolio content and its types
+libs/ui                  type:ui       presentational components
+libs/utils               type:util     framework-agnostic helpers
+tools/nx-plugins/*       type:tool     workspace tooling
 ```
 
 Which library may import which is enforced by lint. The rules, the stack and

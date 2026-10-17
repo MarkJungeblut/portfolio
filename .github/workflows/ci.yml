@@ -37,7 +37,13 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - name: Build, typecheck, test, lint
-        run: npx nx affected -t build typecheck test lint
+        run: npx nx affected -t build typecheck lint
+
+      # Not `affected`: lib tests borrow the app's build config, but libs don't
+      # depend on the app, so an app change would skip them. The cache keeps
+      # unchanged projects cheap.
+      - name: Test
+        run: npx nx run-many -t test
 
       - name: Format check
         run: npx nx format:check

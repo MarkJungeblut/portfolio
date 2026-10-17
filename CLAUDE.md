@@ -98,7 +98,11 @@ The Definition of Done depends on these. Node `^24.15` is required by Angular 22
 | Lint | `npx nx run-many -t lint` |
 | Format | `npx nx format:write` (check: `npx nx format:check`) |
 
-CI runs `nx affected -t build typecheck test lint` plus `nx format:check`.
+`--filter` applies to apps and libs. The tooling project runs plain Vitest:
+`npx nx test spec-test-target -- -t <pattern>`.
+
+CI runs `nx affected -t build typecheck lint`, `nx run-many -t test` (lib tests
+borrow the app's build, which `affected` can't see) and `nx format:check`.
 Use `nx graph` to inspect the dependency graph when a boundary rule fires.
 
 ### Workspace conventions
