@@ -16,14 +16,14 @@ creating the Nx workspace.
 
 ## Stack
 
-Decided, pinned to the latest at time of writing (2026-10-03):
+Decided, pinned to the latest *supported* versions (2026-10-17):
 
 | Layer | Choice |
 |-------|--------|
 | Monorepo | Nx 23 with enforced module boundaries |
 | Framework | Angular 22 — standalone components, signals, new control flow (`@if` / `@for`) |
 | Build | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
-| Language | TypeScript 7 |
+| Language | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it |
 | Rendering | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum` |
 | Styling | SCSS + CSS custom properties for design tokens. No Tailwind |
 | Content | Typed TS constants in a content lib, injected via a service. No runtime fetch |
