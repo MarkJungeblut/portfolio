@@ -27,7 +27,8 @@
       "Bash(tree:*)",
       "Bash(which:*)",
       "Bash(pwd)",
-      "Bash(date:*)"
+      "Bash(date:*)",
+      "Bash(npx nx:*)"
     ],
     "deny": [
       "Read(./.env)",

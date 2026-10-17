@@ -9,10 +9,9 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Not yet scaffolded.** The repository currently holds only the template
-scaffolding (guidelines, CI skeleton, devcontainer) and the design mockup. The
-stack below is decided but unimplemented — the first implementation task is
-creating the Nx workspace.
+**Scaffolded, no UI yet.** The Nx workspace, the app shell and all library
+shells exist with boundaries enforced; every library is still empty. The app
+renders a placeholder heading. Building the design is the next work.
 
 ## Stack
 
@@ -28,19 +27,18 @@ Decided, pinned to the latest _supported_ versions (2026-10-17):
 | Styling         | SCSS + CSS custom properties for design tokens. No Tailwind                                                                                             |
 | Content         | Typed TS constants in a content lib, injected via a service. No runtime fetch                                                                           |
 | Unit tests      | Vitest (Angular 22's official runner — Karma is gone)                                                                                                   |
-| E2E             | Playwright                                                                                                                                              |
+| E2E             | Playwright — decided, not set up yet (add with `nx g @nx/playwright:configuration`)                                                                     |
 | Lint/format     | ESLint (typescript-eslint + `@angular-eslint`) and Prettier                                                                                             |
 | Package manager | npm                                                                                                                                                     |
 
 ## Layout
 
-Target workspace shape. Each library's directory mirrors its boundary type —
+Workspace shape. Each library's directory mirrors its boundary type —
 the folder name _is_ the tag:
 
 ```
 apps/
-  digital-portfolio/    the shell: routing, layout, global styles
-  digital-portfolio-e2e/
+  digital-portfolio/    type:app — the shell: routing, layout, global styles
 libs/
   features/
     home/               type:feature
@@ -61,6 +59,7 @@ names must be unique; don't rename either one back.
 Module boundaries, enforced via `@nx/enforce-module-boundaries`:
 
 ```
+app     -> feature, ui, data, utils
 feature -> ui, utils, data
 data    -> utils
 ui      -> utils
@@ -84,23 +83,39 @@ is for.
 
 ## Commands
 
-Fill in once the workspace exists; the Definition of Done depends on these.
+The Definition of Done depends on these. Node `^24.15` is required by Angular 22.
 
-| Task        | Command |
-| ----------- | ------- |
-| Install     | `TODO`  |
-| Dev server  | `TODO`  |
-| Build       | `TODO`  |
-| Test        | `TODO`  |
-| Single test | `TODO`  |
-| E2E         | `TODO`  |
-| Typecheck   | `TODO`  |
-| Lint        | `TODO`  |
-| Format      | `TODO`  |
+| Task        | Command                                              |
+| ----------- | ---------------------------------------------------- |
+| Install     | `npm ci`                                             |
+| Dev server  | `npx nx serve digital-portfolio`                     |
+| Build       | `npx nx run-many -t build`                           |
+| Test        | `npx nx run-many -t test`                            |
+| Single test | `npx nx test <project> --filter=<pattern>`           |
+| Typecheck   | `npx nx run-many -t typecheck`                       |
+| Lint        | `npx nx run-many -t lint`                            |
+| Format      | `npx nx format:write` (check: `npx nx format:check`) |
 
-Nx-specific notes to record here when scaffolding: prefer `nx affected -t <target>`
-in CI over running every project, and `nx graph` to inspect the dependency graph
-when a boundary rule fires.
+CI runs `nx affected -t build typecheck test lint` plus `nx format:check`.
+Use `nx graph` to inspect the dependency graph when a boundary rule fires.
+
+### Workspace conventions
+
+- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/home`,
+  `@portfolio/ui`. Component/directive prefix is `mj`.
+- **SSG:** the build uses `outputMode: "static"` and prerenders every route
+  (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
+  is plain HTML — there is no server bundle, and none should be added.
+- **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
+  `@nx/angular` only allows Angular's official runner on buildable libs, so a
+  `targetDefaults` entry in `nx.json` points `@angular/build:unit-test` at the
+  app's development build instead.
+- **Adding the first spec to a project:** create `tsconfig.spec.json`
+  (`types: ["vitest/globals"]`, `include: ["src/**/*.spec.ts"]`) and add
+  `"test": { "executor": "@angular/build:unit-test" }` to its `project.json`.
+  Projects have no `test` target until then, because the builder fails on
+  zero specs. Specs are type-checked by the test run; `typecheck` covers
+  non-spec sources only.
 
 ## The design is the spec
 

@@ -1,8 +1,20 @@
 version: 2
 
-# TEMPLATE: add an ecosystem block for this project's package manager
-# (npm, pip, gomod, maven, …) alongside the two below.
 updates:
+  # Angular and Nx release their packages in lockstep, so each group moves
+  # together rather than as a dozen separate PRs that can't pass alone.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: chore
+    groups:
+      angular:
+        patterns: ['@angular/*', '@angular-devkit/*', '@schematics/angular']
+      nx:
+        patterns: ['nx', '@nx/*']
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
