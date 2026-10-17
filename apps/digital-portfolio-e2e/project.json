@@ -1,9 +1,0 @@
-{
-  "name": "digital-portfolio-e2e",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "sourceRoot": "apps/digital-portfolio-e2e/src",
-  "implicitDependencies": ["digital-portfolio"],
-  "// targets": "to see all targets run: nx show project digital-portfolio-e2e --web",
-  "targets": {}
-}

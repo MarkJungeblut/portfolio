@@ -4,15 +4,11 @@
   "projectType": "application",
   "prefix": "mj",
   "sourceRoot": "apps/digital-portfolio/src",
-  "tags": [
-    "type:app"
-  ],
+  "tags": ["type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/digital-portfolio",
@@ -25,9 +21,7 @@
             "input": "apps/digital-portfolio/public"
           }
         ],
-        "styles": [
-          "apps/digital-portfolio/src/styles.scss"
-        ],
+        "styles": ["apps/digital-portfolio/src/styles.scss"],
         "server": "apps/digital-portfolio/src/main.server.ts",
         "outputMode": "static"
       },
@@ -70,12 +64,6 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "test": {
-      "executor": "@angular/build:unit-test",
-      "options": {
-        "watch": false
-      }
-    },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
@@ -84,6 +72,11 @@
         "port": 4200,
         "staticFilePath": "dist/apps/digital-portfolio/browser",
         "spa": false
+      }
+    },
+    "typecheck": {
+      "options": {
+        "command": "tsc --noEmit -p {projectRoot}/tsconfig.app.json"
       }
     }
   }

@@ -16,26 +16,26 @@ creating the Nx workspace.
 
 ## Stack
 
-Decided, pinned to the latest *supported* versions (2026-10-17):
+Decided, pinned to the latest _supported_ versions (2026-10-17):
 
-| Layer | Choice |
-|-------|--------|
-| Monorepo | Nx 23 with enforced module boundaries |
-| Framework | Angular 22 — standalone components, signals, new control flow (`@if` / `@for`) |
-| Build | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
-| Language | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it |
-| Rendering | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum` |
-| Styling | SCSS + CSS custom properties for design tokens. No Tailwind |
-| Content | Typed TS constants in a content lib, injected via a service. No runtime fetch |
-| Unit tests | Vitest (Angular 22's official runner — Karma is gone) |
-| E2E | Playwright |
-| Lint/format | ESLint (typescript-eslint + `@angular-eslint`) and Prettier |
-| Package manager | npm |
+| Layer           | Choice                                                                                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Monorepo        | Nx 23 with enforced module boundaries                                                                                                                   |
+| Framework       | Angular 22 — standalone components, signals, new control flow (`@if` / `@for`)                                                                          |
+| Build           | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
+| Language        | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it                                                  |
+| Rendering       | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum`                                                                    |
+| Styling         | SCSS + CSS custom properties for design tokens. No Tailwind                                                                                             |
+| Content         | Typed TS constants in a content lib, injected via a service. No runtime fetch                                                                           |
+| Unit tests      | Vitest (Angular 22's official runner — Karma is gone)                                                                                                   |
+| E2E             | Playwright                                                                                                                                              |
+| Lint/format     | ESLint (typescript-eslint + `@angular-eslint`) and Prettier                                                                                             |
+| Package manager | npm                                                                                                                                                     |
 
 ## Layout
 
 Target workspace shape. Each library's directory mirrors its boundary type —
-the folder name *is* the tag:
+the folder name _is_ the tag:
 
 ```
 apps/
@@ -74,10 +74,10 @@ one page, not a dependency graph. A feature lib is a **section**, not a route.
 
 Only two routes, both prerendered:
 
-| Route | What it is |
-|-------|-----------|
-| `/` | The whole scrolling page — `features/home`, `profile`, `skills`, `portfolio`, `contact` stacked in order. In-page movement is anchor links plus scroll-spy, not the router |
-| `/impressum` | `features/impressum`, rendered as the overlay. Given a real URL because a German legal notice has to be directly linkable |
+| Route        | What it is                                                                                                                                                                 |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`          | The whole scrolling page — `features/home`, `profile`, `skills`, `portfolio`, `contact` stacked in order. In-page movement is anchor links plus scroll-spy, not the router |
+| `/impressum` | `features/impressum`, rendered as the overlay. Given a real URL because a German legal notice has to be directly linkable                                                  |
 
 Don't reach for the router to switch sections; that is what the scroll position
 is for.
@@ -86,17 +86,17 @@ is for.
 
 Fill in once the workspace exists; the Definition of Done depends on these.
 
-| Task          | Command |
-|---------------|---------|
-| Install       | `TODO`  |
-| Dev server    | `TODO`  |
-| Build         | `TODO`  |
-| Test          | `TODO`  |
-| Single test   | `TODO`  |
-| E2E           | `TODO`  |
-| Typecheck     | `TODO`  |
-| Lint          | `TODO`  |
-| Format        | `TODO`  |
+| Task        | Command |
+| ----------- | ------- |
+| Install     | `TODO`  |
+| Dev server  | `TODO`  |
+| Build       | `TODO`  |
+| Test        | `TODO`  |
+| Single test | `TODO`  |
+| E2E         | `TODO`  |
+| Typecheck   | `TODO`  |
+| Lint        | `TODO`  |
+| Format      | `TODO`  |
 
 Nx-specific notes to record here when scaffolding: prefer `nx affected -t <target>`
 in CI over running every project, and `nx graph` to inspect the dependency graph
@@ -142,7 +142,7 @@ contact details are dummy text. Check before assuming.
 
 **The Impressum is settled.** `docs/mockup/ImpressumPage.tsx` holds the real
 details, carried over from another of Mark's projects. It is React and Tailwind
-from a different design system — take the *data and the German wording*, ignore
+from a different design system — take the _data and the German wording_, ignore
 the markup and classes entirely. It supersedes the dummy Impressum inside the
 mockup (`Musterstraße 1`, `DE000000000`), which must not be used.
 
@@ -151,8 +151,8 @@ USt-IdNr. and no phone number — don't reintroduce the mockup's placeholder one
 A German Impressum is a legal requirement; treat changes to its wording as
 Mark's call, not an implementation detail.
 
-The Skills section lists React/Next.js as Mark's skills — that is *content about
-Mark*, not a statement about this repository's stack.
+The Skills section lists React/Next.js as Mark's skills — that is _content about
+Mark_, not a statement about this repository's stack.
 
 ## Guidelines
 
