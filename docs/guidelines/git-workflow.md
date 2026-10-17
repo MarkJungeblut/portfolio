@@ -27,8 +27,9 @@ Examples: `feat/task-list-api`, `fix/auth-token-expiry`, `chore/update-dependenc
 [optional footer(s)]
 ```
 
+- Keep messages short and simple — a plain one-line summary is usually enough.
 - Summary is imperative, lowercase, no trailing period, max 72 chars.
-- Body explains *why*, not *what*.
+- Body is optional; add one only when the *why* isn't obvious, never to restate *what*.
 - Footer references issues: `Closes #42`, `Refs #17`.
 - No AI attribution: never add `Co-Authored-By: Claude …` trailers to commits
   or "Generated with Claude Code" lines to PR descriptions.
