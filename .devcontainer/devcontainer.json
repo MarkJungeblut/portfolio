@@ -10,7 +10,7 @@
     // Required by the claude-code feature below if the base image has no
     // Node.js. Safe to remove if your chosen base/language feature already
     // provides Node (e.g. a javascript-node or typescript-node image).
-    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/node:2": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
   },
