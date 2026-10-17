@@ -8,3 +8,6 @@
 .nx/self-healing
 # Mockup is a generated design export, not source
 /docs/mockup
+
+# Markdown is hand-formatted prose: keep compact tables and *emphasis*
+*.md
