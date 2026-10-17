@@ -1,7 +1,10 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import type { CreateNodesContextV2 } from '@nx/devkit';
+import {
+  AggregateCreateNodesError,
+  type CreateNodesContextV2,
+} from '@nx/devkit';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createNodesV2 } from './index';
 
@@ -27,10 +30,14 @@ describe('spec-test-target', () => {
     writeFileSync(fullPath, '');
   }
 
-  async function targetsFor(projectRoot: string) {
+  async function targetsFor(projectRoot: string, pluginOptions = options) {
     const configFile = `${projectRoot}/project.json`;
     addFile(configFile);
-    const [[, result]] = await createNodes([configFile], options, context);
+    const [[, result]] = await createNodes(
+      [configFile],
+      pluginOptions,
+      context,
+    );
     return result.projects?.[projectRoot]?.targets;
   }
 
@@ -41,7 +48,11 @@ describe('spec-test-target', () => {
       test: {
         executor: '@angular/build:unit-test',
         cache: true,
-        inputs: ['default', '^production'],
+        inputs: [
+          'default',
+          '^production',
+          { input: 'production', projects: 'app' },
+        ],
         options: {
           buildTarget: 'app:build:development',
           tsConfig: '{projectRoot}/tsconfig.spec.json',
@@ -49,6 +60,25 @@ describe('spec-test-target', () => {
         },
       },
     });
+  });
+
+  it('treats *.test.ts files as specs, as the builder does', async () => {
+    addFile('libs/utils/src/format.test.ts');
+
+    expect(await targetsFor('libs/utils')).toHaveProperty('test');
+  });
+
+  it('fails with a pointer to nx.json when buildTarget is missing', async () => {
+    addFile('libs/ui/src/button.spec.ts');
+
+    // Nx aggregates per-file plugin errors and reports each one to the user.
+    const error = await targetsFor('libs/ui', { buildTarget: '' }).catch(
+      (e: unknown) => e,
+    );
+    expect(error).toBeInstanceOf(AggregateCreateNodesError);
+    const [[file, cause]] = (error as AggregateCreateNodesError).errors;
+    expect(file).toBe('libs/ui/project.json');
+    expect(cause.message).toMatch(/"buildTarget" option/);
   });
 
   it('adds nothing to a project without specs', async () => {

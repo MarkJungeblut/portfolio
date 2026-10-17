@@ -15,6 +15,8 @@ concurrency:
 
 permissions:
   contents: read
+  # nx-set-shas looks up the last successful run on main for `affected`.
+  actions: read
 
 jobs:
   check:
@@ -27,7 +29,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci

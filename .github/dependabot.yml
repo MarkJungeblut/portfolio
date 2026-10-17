@@ -9,9 +9,19 @@ updates:
       interval: monthly
     commit-message:
       prefix: chore
+    # Nx upgrades go through `nx migrate`, which Dependabot can't run; it only
+    # proposes the version bump. TypeScript is capped at what Angular accepts.
+    ignore:
+      - dependency-name: typescript
+        versions: ['>=6.1']
     groups:
       angular:
-        patterns: ['@angular/*', '@angular-devkit/*', '@schematics/angular']
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+          - '@schematics/angular'
+          - 'angular-eslint'
+          - '@angular-eslint/*'
       nx:
         patterns: ['nx', '@nx/*']
 

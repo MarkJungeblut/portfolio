@@ -113,10 +113,15 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   tests borrow the app's development build config instead.
 - **`test` targets are inferred, never hand-written.** The local plugin
   `tools/nx-plugins/spec-test-target` gives an app or lib a `test` target
-  (`@angular/build:unit-test`) exactly when it contains `src/**/*.spec.ts` —
+  (`@angular/build:unit-test`) exactly when it contains `src/**/*.spec.ts`
+  or `*.test.ts` —
   the builder fails on zero specs, so the target can't exist everywhere. Just
   write the spec; it runs. Specs are type-checked by the test run;
   `typecheck` covers non-spec sources only.
+- **Upgrading Nx or Angular:** use `npx nx migrate latest`, then
+  `npx nx migrate --run-migrations`. Dependabot only bumps versions and can't
+  run migrations, so treat its Nx PRs as a reminder, not the upgrade.
+  TypeScript stays `<6.1` until Angular accepts newer.
 
 ## The design is the spec
 

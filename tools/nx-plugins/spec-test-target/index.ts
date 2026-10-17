@@ -37,7 +37,8 @@ function createTestTarget(
   context: CreateNodesContextV2,
 ) {
   const projectRoot = dirname(configFile);
-  const specs = globSync('src/**/*.spec.ts', {
+  // The same files the unit-test builder runs by default.
+  const specs = globSync(['src/**/*.spec.ts', 'src/**/*.test.ts'], {
     cwd: join(context.workspaceRoot, projectRoot),
   });
   if (specs.length === 0) {
@@ -49,10 +50,17 @@ function createTestTarget(
     );
   }
 
+  // Tests compile with the borrowed build's config, so that project's sources
+  // must invalidate the cache too — a lib doesn't depend on the app otherwise.
+  const buildProject = options.buildTarget.split(':')[0];
   const test: TargetConfiguration = {
     executor: '@angular/build:unit-test',
     cache: true,
-    inputs: ['default', '^production'],
+    inputs: [
+      'default',
+      '^production',
+      { input: 'production', projects: buildProject },
+    ],
     options: {
       buildTarget: options.buildTarget,
       tsConfig: '{projectRoot}/tsconfig.spec.json',
