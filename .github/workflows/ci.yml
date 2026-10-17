@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   check:
-    name: Definition of Done
+    name: Build and Verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
