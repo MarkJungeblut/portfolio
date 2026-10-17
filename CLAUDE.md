@@ -9,38 +9,36 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Not yet scaffolded.** The repository currently holds only the template
-scaffolding (guidelines, CI skeleton, devcontainer) and the design mockup. The
-stack below is decided but unimplemented — the first implementation task is
-creating the Nx workspace.
+**Scaffolded, no UI yet.** The Nx workspace, the app shell and all library
+shells exist with boundaries enforced; every library is still empty. The app
+renders a placeholder heading. Building the design is the next work.
 
 ## Stack
 
-Decided, pinned to the latest at time of writing (2026-10-03):
+Decided, pinned to the latest *supported* versions (2026-10-17):
 
 | Layer | Choice |
 |-------|--------|
 | Monorepo | Nx 23 with enforced module boundaries |
 | Framework | Angular 22 — standalone components, signals, new control flow (`@if` / `@for`) |
 | Build | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
-| Language | TypeScript 7 |
+| Language | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it |
 | Rendering | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum` |
 | Styling | SCSS + CSS custom properties for design tokens. No Tailwind |
 | Content | Typed TS constants in a content lib, injected via a service. No runtime fetch |
 | Unit tests | Vitest (Angular 22's official runner — Karma is gone) |
-| E2E | Playwright |
+| E2E | Playwright — decided, not set up yet (add with `nx g @nx/playwright:configuration`) |
 | Lint/format | ESLint (typescript-eslint + `@angular-eslint`) and Prettier |
 | Package manager | npm |
 
 ## Layout
 
-Target workspace shape. Each library's directory mirrors its boundary type —
+Workspace shape. Each library's directory mirrors its boundary type —
 the folder name *is* the tag:
 
 ```
 apps/
-  digital-portfolio/    the shell: routing, layout, global styles
-  digital-portfolio-e2e/
+  digital-portfolio/    type:app — the shell: routing, layout, global styles
 libs/
   features/
     home/               type:feature
@@ -52,6 +50,8 @@ libs/
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
   utils/                type:util    — framework-agnostic helpers
+tools/
+  nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
 The app is `digital-portfolio`, not `portfolio`, so that `libs/features/portfolio`
@@ -61,6 +61,7 @@ names must be unique; don't rename either one back.
 Module boundaries, enforced via `@nx/enforce-module-boundaries`:
 
 ```
+app     -> feature, ui, data, utils
 feature -> ui, utils, data
 data    -> utils
 ui      -> utils
@@ -75,7 +76,7 @@ one page, not a dependency graph. A feature lib is a **section**, not a route.
 Only two routes, both prerendered:
 
 | Route | What it is |
-|-------|-----------|
+|-------|------------|
 | `/` | The whole scrolling page — `features/home`, `profile`, `skills`, `portfolio`, `contact` stacked in order. In-page movement is anchor links plus scroll-spy, not the router |
 | `/impressum` | `features/impressum`, rendered as the overlay. Given a real URL because a German legal notice has to be directly linkable |
 
@@ -84,23 +85,48 @@ is for.
 
 ## Commands
 
-Fill in once the workspace exists; the Definition of Done depends on these.
+The Definition of Done depends on these. Node `^24.15` is required by Angular 22.
 
-| Task          | Command |
-|---------------|---------|
-| Install       | `TODO`  |
-| Dev server    | `TODO`  |
-| Build         | `TODO`  |
-| Test          | `TODO`  |
-| Single test   | `TODO`  |
-| E2E           | `TODO`  |
-| Typecheck     | `TODO`  |
-| Lint          | `TODO`  |
-| Format        | `TODO`  |
+| Task | Command | npm script |
+|------|---------|------------|
+| Install | `npm ci` | |
+| Dev server | `npx nx serve digital-portfolio` | `npm start` |
+| Build | `npx nx run-many -t build` | `npm run build` |
+| Test | `npx nx run-many -t test` | `npm test` |
+| Single test | `npx nx test <project> --filter=<pattern>` | |
+| Typecheck | `npx nx run-many -t typecheck` | `npm run typecheck` |
+| Lint | `npx nx run-many -t lint` | `npm run lint` |
+| Format | `npx nx format:write` (check: `npx nx format:check`) | `npm run format` (check: `npm run format:check`) |
+| Whole Definition of Done | `npx nx run-many -t build typecheck lint test && npx nx format:check` | `npm run verify` |
 
-Nx-specific notes to record here when scaffolding: prefer `nx affected -t <target>`
-in CI over running every project, and `nx graph` to inspect the dependency graph
-when a boundary rule fires.
+`--filter` applies to apps and libs. The tooling project runs plain Vitest:
+`npx nx test spec-test-target -- -t <pattern>`.
+
+CI runs `nx affected -t build typecheck lint`, `nx run-many -t test` (lib tests
+borrow the app's build, which `affected` can't see) and `nx format:check`.
+Use `nx graph` to inspect the dependency graph when a boundary rule fires.
+
+### Workspace conventions
+
+- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/home`,
+  `@portfolio/ui`. Component/directive prefix is `mj`.
+- **SSG:** the build uses `outputMode: "static"` and prerenders every route
+  (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
+  is plain HTML — there is no server bundle, and none should be added.
+- **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
+  `@nx/angular` only allows Angular's official runner on buildable libs, so
+  tests borrow the app's development build config instead.
+- **`test` targets are inferred, never hand-written.** The local plugin
+  `tools/nx-plugins/spec-test-target` gives an app or lib a `test` target
+  (`@angular/build:unit-test`) exactly when it contains `src/**/*.spec.ts`
+  or `*.test.ts` —
+  the builder fails on zero specs, so the target can't exist everywhere. Just
+  write the spec; it runs. Specs are type-checked by the test run;
+  `typecheck` covers non-spec sources only.
+- **Upgrading Nx or Angular:** use `npx nx migrate latest`, then
+  `npx nx migrate --run-migrations`. Dependabot only bumps versions and can't
+  run migrations, so treat its Nx PRs as a reminder, not the upgrade.
+  TypeScript stays `<6.1` until Angular accepts newer.
 
 ## The design is the spec
 

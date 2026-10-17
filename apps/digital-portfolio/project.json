@@ -1,0 +1,83 @@
+{
+  "name": "digital-portfolio",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "mj",
+  "sourceRoot": "apps/digital-portfolio/src",
+  "tags": ["type:app"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/digital-portfolio",
+        "browser": "apps/digital-portfolio/src/main.ts",
+        "tsConfig": "apps/digital-portfolio/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/digital-portfolio/public"
+          }
+        ],
+        "styles": ["apps/digital-portfolio/src/styles.scss"],
+        "server": "apps/digital-portfolio/src/main.server.ts",
+        "outputMode": "static"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "configurations": {
+        "production": {
+          "buildTarget": "digital-portfolio:build:production"
+        },
+        "development": {
+          "buildTarget": "digital-portfolio:build:development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "digital-portfolio:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/digital-portfolio/browser",
+        "spa": false
+      }
+    },
+    "typecheck": {
+      "options": {
+        "command": "tsc --noEmit -p {projectRoot}/tsconfig.app.json"
+      }
+    }
+  }
+}

@@ -27,7 +27,17 @@
       "Bash(tree:*)",
       "Bash(which:*)",
       "Bash(pwd)",
-      "Bash(date:*)"
+      "Bash(date:*)",
+      "Bash(npx nx run-many:*)",
+      "Bash(npx nx affected:*)",
+      "Bash(npx nx build:*)",
+      "Bash(npx nx test:*)",
+      "Bash(npx nx lint:*)",
+      "Bash(npx nx typecheck:*)",
+      "Bash(npx nx show:*)",
+      "Bash(npx nx graph:*)",
+      "Bash(npx nx report)",
+      "Bash(npx nx format:check:*)"
     ],
     "deny": [
       "Read(./.env)",

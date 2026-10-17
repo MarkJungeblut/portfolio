@@ -1,0 +1,13 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+/.nx/cache
+/.nx/workspace-data
+.angular
+
+.nx/self-healing
+# Mockup is a generated design export, not source
+/docs/mockup
+
+# Markdown is hand-formatted prose: keep compact tables and *emphasis*
+*.md
