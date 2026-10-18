@@ -1,6 +1,13 @@
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="header">
-  <a class="logo" href="/#home" aria-label="Mark Jungeblut, home">
-    <!-- docs/design/svg/MARK_Logo.svg, viewBox cropped to the visible glyphs -->
+  <a
+    class="logo"
+    routerLink="/"
+    fragment="home"
+    aria-label="Mark Jungeblut, home"
+  >
+    <!-- Paths of docs/design/svg/MARK_Logo.svg, inlined so the letters can take
+         the colour tokens; viewBox cropped to the visible glyphs. -->
     <svg viewBox="200 190 1600 308" aria-hidden="true" focusable="false">
       <path
         class="logo-m"
@@ -25,7 +32,9 @@
 
   <nav class="nav" aria-label="Main">
     @for (section of sections(); track section.id) {
-    <a class="nav-link" [href]="'/#' + section.id">{{ section.label }}</a>
+    <a class="nav-link" routerLink="/" [fragment]="section.id"
+      >{{ section.label }}</a
+    >
     }
     <a
       class="nav-link"
@@ -36,7 +45,13 @@
     >
   </nav>
 
-  <button class="menu" type="button">
+  <button
+    class="menu"
+    type="button"
+    aria-controls="mobile-menu"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
     Menu
     <span class="menu-bars" aria-hidden="true">
       <span class="menu-bar menu-bar--long"></span>

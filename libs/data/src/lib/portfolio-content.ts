@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-
-/** A section of the one-page site, reachable as an in-page anchor. */
-export interface NavSection {
-  /** Element id of the section, used as the URL fragment. */
-  readonly id: string;
-  readonly label: string;
-}
+import type { NavSection } from '@portfolio/utils';
 
 /** Page sections in display order. */
 const SECTIONS: readonly NavSection[] = [

@@ -6,6 +6,24 @@ $wide: 860px;
   display: contents;
 }
 
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--color-orange);
+  color: var(--color-dark);
+  transform: translateY(-200%);
+
+  &:focus-visible {
+    transform: none;
+  }
+}
+
 .header {
   position: fixed;
   inset: 0 0 auto;

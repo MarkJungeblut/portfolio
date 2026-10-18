@@ -11,7 +11,16 @@
   --color-nav: rgb(254 247 238 / 82%);
   --color-header-bg: rgb(28 16 9 / 82%);
 
+  // Fixed header: 44px tap target plus vertical padding (12px, 30px wide).
+  --header-height: 68px;
+
   --font-sans: Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+@media (min-width: 860px) {
+  :root {
+    --header-height: 104px;
+  }
 }
 
 *,
@@ -30,6 +39,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+html {
+  scroll-padding-top: var(--header-height);
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import type { NavSection } from '@portfolio/utils';
 
-/** Fixed top bar: logo, section navigation and the mobile menu toggle. */
+/** Fixed top bar: skip link, logo, section navigation and the menu toggle. */
 @Component({
   selector: 'mj-site-header',
   imports: [RouterLink, RouterLinkActive],
@@ -11,6 +17,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class SiteHeader {
   /** In-page sections, in display order. */
-  readonly sections =
-    input.required<readonly { id: string; label: string }[]>();
+  readonly sections = input.required<readonly NavSection[]>();
+
+  /** Mobile menu state. The overlay it controls is not built yet. */
+  protected readonly menuOpen = signal(false);
+
+  protected toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
+  }
 }
