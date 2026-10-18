@@ -9,9 +9,10 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Scaffolded, no UI yet.** The Nx workspace, the app shell and all library
-shells exist with boundaries enforced; every library is still empty. The app
-renders a placeholder heading. Building the design is the next work.
+**Header built, sections not yet.** The Nx workspace, the app shell and all
+library shells exist with boundaries enforced. The site header (`libs/ui`) is
+done; the mobile menu overlay, scroll-spy and every page section are still to
+come. `/impressum` is an empty placeholder route.
 
 ## Stack
 
@@ -24,7 +25,8 @@ Decided, pinned to the latest *supported* versions (2026-10-17):
 | Build | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
 | Language | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it |
 | Rendering | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum` |
-| Styling | SCSS + CSS custom properties for design tokens. No Tailwind |
+| Styling | SCSS + CSS custom properties for design tokens (`apps/digital-portfolio/src/styles.scss`). No Tailwind |
+| Fonts | Self-hosted via `@fontsource`, never Google Fonts (GDPR). Import only the weights in use |
 | Content | Typed TS constants in a content lib, injected via a service. No runtime fetch |
 | Unit tests | Vitest (Angular 22's official runner — Karma is gone) |
 | E2E | Playwright — decided, not set up yet (add with `nx g @nx/playwright:configuration`) |
@@ -41,11 +43,6 @@ apps/
   digital-portfolio/    type:app — the shell: routing, layout, global styles
 libs/
   features/
-    home/               type:feature
-    profile/            type:feature
-    skills/             type:feature
-    portfolio/          type:feature
-    contact/            type:feature
     impressum/          type:feature
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
@@ -54,9 +51,13 @@ tools/
   nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
-The app is `digital-portfolio`, not `portfolio`, so that `libs/features/portfolio`
-— the "Selected work" section — keeps the name the design gives it. Nx project
-names must be unique; don't rename either one back.
+Section libs (`home`, `profile`, `skills`, `portfolio`, `contact`) are not
+scaffolded up front — generate each one (`type:feature`, `libs/features/<name>`,
+`@portfolio/features/<name>`) in the increment that builds it.
+
+The app is `digital-portfolio`, not `portfolio`, so that the future
+`libs/features/portfolio` — the "Selected work" section — keeps the name the
+design gives it. Nx project names must be unique; don't rename either one back.
 
 Module boundaries, enforced via `@nx/enforce-module-boundaries`:
 
@@ -108,7 +109,7 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
 
 ### Workspace conventions
 
-- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/home`,
+- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/impressum`,
   `@portfolio/ui`. Component/directive prefix is `mj`.
 - **SSG:** the build uses `outputMode: "static"` and prerenders every route
   (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
@@ -143,6 +144,14 @@ touched — the others go stale. Avoid `Mark Jungeblut - Portfolio.html`; it is 
 
 It is a generated prototype, not code to port. Read it for intent, then
 implement idiomatically in Angular.
+
+### The brand outranks the mockup on colour, type and logo
+
+`docs/design/` holds the brand guidelines (`MARK_Brand_Guidelines_v1.0.pdf`,
+`Moodboard.md`) and the logo SVGs. For **colour, typeface and logo** they are
+the authority; the mockup's palette and fonts are superseded. The mockup still
+governs layout, spacing, breakpoints and motion. The MARK wordmark is always
+the SVG asset (`svg/MARK_Logo.svg`), never re-set as text.
 
 ### Rules that outrank the mockup
 

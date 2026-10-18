@@ -1,2 +1,1 @@
-// Public API. Nothing is exported yet.
-export {};
+export type { NavSection } from './lib/nav-section';

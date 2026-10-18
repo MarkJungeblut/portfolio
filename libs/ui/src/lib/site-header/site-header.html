@@ -1,0 +1,61 @@
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+  <a
+    class="logo"
+    routerLink="/"
+    fragment="home"
+    aria-label="Mark Jungeblut, home"
+  >
+    <!-- Paths of docs/design/svg/MARK_Logo.svg, inlined so the letters can take
+         the colour tokens; viewBox cropped to the visible glyphs. -->
+    <svg viewBox="200 190 1600 308" aria-hidden="true" focusable="false">
+      <path
+        class="logo-m"
+        d="M200 498V190H248L355 344L471 190H521V498H474V257L354 414L246 257V498Z"
+      />
+      <path
+        class="logo-ark"
+        fill-rule="evenodd"
+        d="M670 498L813 190H844L984 498H944L908 420H746L709 498ZM760 385H893L827 240Z"
+      />
+      <path
+        class="logo-ark"
+        fill-rule="evenodd"
+        d="M1136 498V190H1272C1332 190 1370 225 1370 283C1370 332 1343 364 1290 377L1380 498H1337L1249 379H1173V498ZM1173 223V346H1265C1309 346 1334 324 1334 284C1334 245 1308 223 1265 223Z"
+      />
+      <path
+        class="logo-ark"
+        d="M1546 498V190H1582V359L1749 190H1795L1657 331L1800 498H1753L1630 356L1582 404V498Z"
+      />
+    </svg>
+  </a>
+
+  <nav class="nav" aria-label="Main">
+    @for (section of sections(); track section.id) {
+    <a class="nav-link" routerLink="/" [fragment]="section.id"
+      >{{ section.label }}</a
+    >
+    }
+    <a
+      class="nav-link"
+      routerLink="/impressum"
+      routerLinkActive
+      ariaCurrentWhenActive="page"
+      >Impressum</a
+    >
+  </nav>
+
+  <button
+    class="menu"
+    type="button"
+    aria-controls="mobile-menu"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
+    Menu
+    <span class="menu-bars" aria-hidden="true">
+      <span class="menu-bar menu-bar--long"></span>
+      <span class="menu-bar menu-bar--short"></span>
+    </span>
+  </button>
+</header>

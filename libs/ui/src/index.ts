@@ -1,2 +1,1 @@
-// Public API. Nothing is exported yet.
-export {};
+export { SiteHeader } from './lib/site-header/site-header';
