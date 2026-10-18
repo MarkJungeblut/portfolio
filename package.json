@@ -29,7 +29,7 @@
     "@nx/web": "23.3.0",
     "@schematics/angular": "~22.2.3",
     "@swc/helpers": "~0.5.18",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.5",
     "@typescript-eslint/utils": "^8.71.2",
     "angular-eslint": "^22.6.0",
     "eslint": "^10.0.0",
