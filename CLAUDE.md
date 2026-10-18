@@ -9,9 +9,10 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Scaffolded, no UI yet.** The Nx workspace, the app shell and all library
-shells exist with boundaries enforced; every library is still empty. The app
-renders a placeholder heading. Building the design is the next work.
+**Header built, sections not yet.** The Nx workspace, the app shell and all
+library shells exist with boundaries enforced. The site header (`libs/ui`) is
+done; the mobile menu overlay, scroll-spy and every page section are still to
+come. `/impressum` is an empty placeholder route.
 
 ## Stack
 
@@ -24,7 +25,8 @@ Decided, pinned to the latest *supported* versions (2026-10-17):
 | Build | `@angular/build` application builder — **Vite** dev server + esbuild. Webpack is legacy here; do not reach for a custom builder or Analog to "get Vite" |
 | Language | TypeScript 6.0 — Angular 22 and typescript-eslint require `>=6.0 <6.1`; move to 7 when both support it |
 | Rendering | **Prerendered to static HTML (SSG)** at build time — two pages: `/` and `/impressum` |
-| Styling | SCSS + CSS custom properties for design tokens. No Tailwind |
+| Styling | SCSS + CSS custom properties for design tokens (`apps/digital-portfolio/src/styles.scss`). No Tailwind |
+| Fonts | Self-hosted via `@fontsource`, never Google Fonts (GDPR). Import only the weights in use |
 | Content | Typed TS constants in a content lib, injected via a service. No runtime fetch |
 | Unit tests | Vitest (Angular 22's official runner — Karma is gone) |
 | E2E | Playwright — decided, not set up yet (add with `nx g @nx/playwright:configuration`) |
@@ -143,6 +145,14 @@ touched — the others go stale. Avoid `Mark Jungeblut - Portfolio.html`; it is 
 
 It is a generated prototype, not code to port. Read it for intent, then
 implement idiomatically in Angular.
+
+### The brand outranks the mockup on colour, type and logo
+
+`docs/design/` holds the brand guidelines (`MARK_Brand_Guidelines_v1.0.pdf`,
+`Moodboard.md`) and the logo SVGs. For **colour, typeface and logo** they are
+the authority; the mockup's palette and fonts are superseded. The mockup still
+governs layout, spacing, breakpoints and motion. The MARK wordmark is always
+the SVG asset (`svg/MARK_Logo.svg`), never re-set as text.
 
 ### Rules that outrank the mockup
 
