@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { PortfolioContent } from '@portfolio/data';
+import { SiteHeader } from '@portfolio/ui';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SiteHeader],
   selector: 'mj-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {}
+export class App {
+  protected readonly content = inject(PortfolioContent);
+}
