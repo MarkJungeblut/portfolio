@@ -1,2 +1,1 @@
-// Public API. Nothing is exported yet.
-export {};
+export { PortfolioContent, type NavSection } from './lib/portfolio-content';

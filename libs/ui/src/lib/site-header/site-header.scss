@@ -1,0 +1,131 @@
+// Mobile first: the base is the narrow layout; this widens it.
+// Local until a second component needs the same breakpoint.
+$wide: 860px;
+
+:host {
+  display: contents;
+}
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  background: var(--color-header-bg);
+  backdrop-filter: blur(14px);
+
+  @media (min-width: $wide) {
+    gap: 32px;
+    padding: 30px 56px;
+  }
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+
+  svg {
+    display: block;
+    height: 20px;
+    width: auto;
+
+    @media (min-width: $wide) {
+      height: 24px;
+    }
+  }
+}
+
+.logo-m {
+  fill: var(--color-orange);
+}
+
+.logo-ark {
+  fill: var(--color-cream);
+}
+
+.nav {
+  display: none;
+
+  @media (min-width: $wide) {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 13.5px;
+    letter-spacing: 0.06em;
+  }
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-nav);
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+  }
+
+  &[aria-current] {
+    color: var(--color-orange);
+    text-decoration-color: var(--color-orange);
+  }
+}
+
+.menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--color-cream);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  @media (min-width: $wide) {
+    display: none;
+  }
+}
+
+.menu-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-bar {
+  height: 1px;
+
+  &--long {
+    width: 20px;
+    background: var(--color-orange);
+  }
+
+  &--short {
+    width: 14px;
+    align-self: flex-end;
+    background: var(--color-cream);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-link {
+    transition:
+      color 0.3s ease,
+      text-decoration-color 0.3s ease;
+  }
+}
