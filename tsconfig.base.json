@@ -14,13 +14,6 @@
     "paths": {
       "@portfolio/ui": ["./libs/ui/src/index.ts"],
       "@portfolio/utils": ["./libs/utils/src/index.ts"],
-      "@portfolio/features/home": ["./libs/features/home/src/index.ts"],
-      "@portfolio/features/profile": ["./libs/features/profile/src/index.ts"],
-      "@portfolio/features/skills": ["./libs/features/skills/src/index.ts"],
-      "@portfolio/features/portfolio": [
-        "./libs/features/portfolio/src/index.ts"
-      ],
-      "@portfolio/features/contact": ["./libs/features/contact/src/index.ts"],
       "@portfolio/features/impressum": [
         "./libs/features/impressum/src/index.ts"
       ],

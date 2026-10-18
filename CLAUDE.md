@@ -43,11 +43,6 @@ apps/
   digital-portfolio/    type:app — the shell: routing, layout, global styles
 libs/
   features/
-    home/               type:feature
-    profile/            type:feature
-    skills/             type:feature
-    portfolio/          type:feature
-    contact/            type:feature
     impressum/          type:feature
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
@@ -56,9 +51,13 @@ tools/
   nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
-The app is `digital-portfolio`, not `portfolio`, so that `libs/features/portfolio`
-— the "Selected work" section — keeps the name the design gives it. Nx project
-names must be unique; don't rename either one back.
+Section libs (`home`, `profile`, `skills`, `portfolio`, `contact`) are not
+scaffolded up front — generate each one (`type:feature`, `libs/features/<name>`,
+`@portfolio/features/<name>`) in the increment that builds it.
+
+The app is `digital-portfolio`, not `portfolio`, so that the future
+`libs/features/portfolio` — the "Selected work" section — keeps the name the
+design gives it. Nx project names must be unique; don't rename either one back.
 
 Module boundaries, enforced via `@nx/enforce-module-boundaries`:
 
@@ -110,7 +109,7 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
 
 ### Workspace conventions
 
-- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/home`,
+- **Imports:** `@portfolio/<lib path>`, e.g. `@portfolio/features/impressum`,
   `@portfolio/ui`. Component/directive prefix is `mj`.
 - **SSG:** the build uses `outputMode: "static"` and prerenders every route
   (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
