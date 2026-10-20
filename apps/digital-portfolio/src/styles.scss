@@ -19,7 +19,7 @@
     var(--color-cream) 6%
   );
   --color-dark-deep: color-mix(in srgb, var(--color-dark), black 20%);
-  --color-glow: rgb(244 122 54 / 9%);
+  --color-glow: color-mix(in srgb, var(--color-orange) 9%, transparent);
 
   // Fixed header: 44px tap target plus vertical padding (12px, 30px wide).
   --header-height: 68px;

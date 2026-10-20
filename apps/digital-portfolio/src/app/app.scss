@@ -1,5 +1,5 @@
 // Mobile first: the base is the narrow layout; this widens it.
-// Same value as libs/ui site-header.scss; not yet a shared partial.
+// Also hard-coded in styles.scss and site-header.scss; not yet shared.
 $wide: 860px;
 
 $glow: radial-gradient(120% 80% at 0% 100%, var(--color-glow), transparent 60%);

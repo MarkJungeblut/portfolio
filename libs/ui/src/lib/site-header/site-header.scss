@@ -1,5 +1,5 @@
 // Mobile first: the base is the narrow layout; this widens it.
-// Local until a second component needs the same breakpoint.
+// Also hard-coded in styles.scss and app.scss; not yet shared.
 $wide: 860px;
 
 :host {
