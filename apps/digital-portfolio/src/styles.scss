@@ -11,6 +11,16 @@
   --color-nav: rgb(254 247 238 / 82%);
   --color-header-bg: rgb(28 16 9 / 82%);
 
+  // Content column surface. The brand defines one dark; the gradient needs a
+  // lighter and a deeper stop, so both are derived from it.
+  --color-dark-lifted: color-mix(
+    in srgb,
+    var(--color-dark),
+    var(--color-cream) 6%
+  );
+  --color-dark-deep: color-mix(in srgb, var(--color-dark), black 20%);
+  --color-glow: rgb(244 122 54 / 9%);
+
   // Fixed header: 44px tap target plus vertical padding (12px, 30px wide).
   --header-height: 68px;
 
