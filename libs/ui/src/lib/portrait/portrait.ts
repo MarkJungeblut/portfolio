@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 /**
  * The full-bleed portrait: the right-hand column when wide, the backdrop
@@ -11,7 +11,4 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   styleUrl: './portrait.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Portrait {
-  /** Describes the photo for screen readers. */
-  readonly alt = input.required<string>();
-}
+export class Portrait {}

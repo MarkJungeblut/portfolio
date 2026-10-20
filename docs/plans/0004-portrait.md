@@ -214,6 +214,9 @@ These come from /review-implementation and were applied with Mark's approval:
   placeholder `<h1>Mark Jungeblut</h1>` removed from `app.html` instead. The
   real heading arrives with the hero section, so until then the page has no
   `<h1>`.
+- **Alt text is fixed in `portrait.html`.** Mark's call during PR review: it
+  is one photo with one description, so the `alt` input and the
+  `PortfolioContent.portrait` entry were dropped.
 
 ## Verification
 
