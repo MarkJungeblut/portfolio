@@ -1,0 +1,216 @@
+@use 'breakpoints' as *;
+
+// Shared by the uppercase micro-labels: socials, the text link, the cue.
+@mixin label($size, $tracking) {
+  font-size: $size;
+  letter-spacing: $tracking;
+  text-transform: uppercase;
+}
+
+:host {
+  display: block;
+}
+
+// One viewport tall: `main` already reserves the header, so subtract it and
+// trim the top padding to match. Narrow sits the text at the bottom of the
+// portrait backdrop; wide centres it in the content column.
+.home {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: calc(100svh - var(--header-height));
+  padding: 28px 22px 36px;
+
+  @media (min-width: $wide) {
+    justify-content: center;
+    padding: 16px 48px 96px 56px;
+  }
+}
+
+.intro {
+  max-width: 520px;
+}
+
+.eyebrow {
+  @include label(11px, 0.28em);
+
+  margin: 0 0 26px;
+  color: var(--color-orange);
+}
+
+.title {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 200;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+
+  @media (min-width: $wide) {
+    font-size: 52px;
+  }
+}
+
+.role {
+  color: var(--color-orange);
+  font-weight: 300;
+
+  // Decorative caret; blinks only when motion is allowed (see below).
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 0.92em;
+    margin-left: 4px;
+    vertical-align: -0.08em;
+    background: var(--color-cream);
+  }
+}
+
+.lede {
+  max-width: 400px;
+  margin: 26px 0 0;
+  color: var(--color-text-muted);
+  font-size: 15.5px;
+  font-weight: 300;
+  line-height: 1.7;
+  text-wrap: pretty;
+
+  @media (min-width: $wide) {
+    font-size: 16.5px;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 40px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 26px;
+  border: 1px solid var(--color-outline);
+  font-size: 13.5px;
+  letter-spacing: 0.05em;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--color-orange);
+    background: var(--color-orange);
+    color: var(--color-dark);
+  }
+}
+
+.text-link {
+  @include label(11.5px, 0.16em);
+
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-text-subtle);
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-underline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+    text-decoration-color: var(--color-orange);
+  }
+}
+
+// Narrow: just below the intro. Wide: pinned to the column's bottom-left;
+// `bottom` sits the text where the mockup's shorter line box put it.
+.socials {
+  @include label(11px, 0.16em);
+
+  display: flex;
+  gap: 26px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: $wide) {
+    position: absolute;
+    bottom: 32px;
+    left: 56px;
+    margin: 0;
+  }
+}
+
+.social,
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-text-subtle);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+  }
+}
+
+.scroll-cue {
+  @include label(10px, 0.2em);
+
+  display: none;
+  gap: 0.5em;
+
+  @media (min-width: $wide) {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .role::after {
+    animation: caret 1.05s steps(1) infinite;
+  }
+
+  .scroll-cue {
+    animation: nudge 2.6s ease-in-out infinite;
+  }
+
+  .button {
+    transition:
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.22s ease;
+  }
+
+  .text-link,
+  .social,
+  .scroll-cue {
+    transition:
+      color 0.3s ease,
+      text-decoration-color 0.3s ease;
+  }
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(7px);
+  }
+}

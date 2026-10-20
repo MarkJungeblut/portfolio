@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PortfolioContent } from '@portfolio/data';
+import { HomeSection } from '@portfolio/features/home';
 import { Portrait, SiteHeader } from '@portfolio/ui';
 
 @Component({
-  imports: [RouterOutlet, SiteHeader, Portrait],
+  imports: [RouterOutlet, SiteHeader, HomeSection, Portrait],
   selector: 'mj-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',

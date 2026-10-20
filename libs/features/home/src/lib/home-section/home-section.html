@@ -1,0 +1,35 @@
+<section class="home" id="home" aria-labelledby="home-title">
+  <div class="intro">
+    <p class="eyebrow">{{ hero.eyebrow }}</p>
+    <h1 class="title" id="home-title">
+      {{ hero.name }}<br />{{ hero.rolePrefix }}
+      <span class="role">{{ hero.role }}</span>
+    </h1>
+    <p class="lede">{{ hero.lede }}</p>
+    <div class="actions">
+      <a class="button" routerLink="/" [fragment]="hero.primaryCta.section"
+        >{{ hero.primaryCta.label }}</a
+      >
+      <a class="text-link" routerLink="/" [fragment]="hero.secondaryCta.section"
+        >{{ hero.secondaryCta.label }}</a
+      >
+    </div>
+  </div>
+
+  <ul class="socials">
+    @for (social of hero.socials; track social.url) {
+    <li>
+      <a class="social" [href]="social.url">{{ social.label }}</a>
+    </li>
+    }
+    <li>
+      <a class="social" routerLink="/" [fragment]="hero.mail.section"
+        >{{ hero.mail.label }}</a
+      >
+    </li>
+  </ul>
+
+  <a class="scroll-cue" routerLink="/" [fragment]="hero.scrollCue.section"
+    ><span aria-hidden="true">↓</span> {{ hero.scrollCue.label }}</a
+  >
+</section>
