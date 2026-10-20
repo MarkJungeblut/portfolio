@@ -7,6 +7,20 @@
   text-transform: uppercase;
 }
 
+// Focus-visible always; hover only where a pointer can actually hover, so a
+// tap on touch screens doesn't leave the state stuck on.
+@mixin active {
+  &:focus-visible {
+    @content;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
 :host {
   display: block;
 }
@@ -21,6 +35,11 @@
   justify-content: flex-end;
   min-height: calc(100svh - var(--header-height));
   padding: 28px 22px 36px;
+
+  // Focused programmatically after an anchor scroll; not itself interactive.
+  &:focus {
+    outline: none;
+  }
 
   @media (min-width: $wide) {
     justify-content: center;
@@ -99,8 +118,7 @@
   font-size: 13.5px;
   letter-spacing: 0.05em;
 
-  &:hover,
-  &:focus-visible {
+  @include active {
     border-color: var(--color-orange);
     background: var(--color-orange);
     color: var(--color-dark);
@@ -119,8 +137,7 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 5px;
 
-  &:hover,
-  &:focus-visible {
+  @include active {
     color: var(--color-orange);
     text-decoration-color: var(--color-orange);
   }
@@ -152,8 +169,7 @@
   min-height: 44px;
   color: var(--color-text-subtle);
 
-  &:hover,
-  &:focus-visible {
+  @include active {
     color: var(--color-orange);
   }
 }
@@ -203,14 +219,8 @@
 }
 
 @keyframes nudge {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: translateY(0);
-  }
-
+  // Movement only: fading would drop the cue below its contrast floor.
   50% {
-    opacity: 1;
     transform: translateY(7px);
   }
 }
