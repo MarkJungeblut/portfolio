@@ -19,11 +19,17 @@
   <ul class="socials">
     @for (social of hero.socials; track social.url) {
     <li>
-      <a class="social" [href]="social.url">{{ social.label }}</a>
+      <a
+        class="social"
+        [href]="social.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ social.label }}</a
+      >
     </li>
     }
     <li>
-      <a class="social" routerLink="/" [fragment]="hero.mail.section"
+      <a class="social" [href]="'mailto:' + hero.mail.address"
         >{{ hero.mail.label }}</a
       >
     </li>

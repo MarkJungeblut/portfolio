@@ -13,6 +13,12 @@ export interface ExternalLink {
   readonly url: string;
 }
 
+/** A link that opens the visitor's mail client. */
+export interface MailLink {
+  readonly label: string;
+  readonly address: string;
+}
+
 /** The first screen: who Mark is, and the ways onward. */
 export interface HeroContent {
   readonly eyebrow: string;
@@ -24,7 +30,7 @@ export interface HeroContent {
   readonly primaryCta: SectionLink;
   readonly secondaryCta: SectionLink;
   readonly socials: readonly ExternalLink[];
-  readonly mail: SectionLink;
+  readonly mail: MailLink;
   readonly scrollCue: SectionLink;
 }
 
@@ -49,7 +55,7 @@ const HERO: HeroContent = {
     { label: 'GitHub', url: 'https://github.com/MarkJungeblut' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/mark-jungeblut/' },
   ],
-  mail: { label: 'Mail', section: 'contact' },
+  mail: { label: 'Mail', address: 'mark.jungeblut@gmail.com' },
   scrollCue: { label: 'Scroll', section: 'profile' },
 };
 
