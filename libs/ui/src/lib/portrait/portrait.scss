@@ -19,7 +19,7 @@
 
   @media (min-width: $wide) {
     position: sticky;
-    top: 0;
+    inset: 0 auto auto;
     align-self: start;
   }
 }

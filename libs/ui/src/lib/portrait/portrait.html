@@ -1,7 +1,7 @@
 <!--
   `sizes` cannot read Sass: 860px is $wide in libs/ui/src/styles/_breakpoints.scss.
-  Narrow, the photo covers a 100svh box, so its rendered width follows the
-  height (2:3 photo), not the viewport width.
+  The photo (2:3) covers a 100svh-tall box, so it renders at whichever is
+  larger: the box's width or two thirds of the viewport height.
 -->
 <picture>
   <source
@@ -13,7 +13,7 @@
       /images/portrait-1600.avif 1600w,
       /images/portrait-2000.avif 2000w
     "
-    sizes="(min-width: 860px) 60vw, 67vh"
+    sizes="(min-width: 860px) max(60vw, 67vh), max(100vw, 67vh)"
   />
   <img
     class="photo"
@@ -25,12 +25,11 @@
       /images/portrait-1600.webp 1600w,
       /images/portrait-2000.webp 2000w
     "
-    sizes="(min-width: 860px) 60vw, 67vh"
+    sizes="(min-width: 860px) max(60vw, 67vh), max(100vw, 67vh)"
     [alt]="alt()"
     width="4672"
     height="7008"
     fetchpriority="high"
-    decoding="async"
   />
 </picture>
 <div class="shade" aria-hidden="true"></div>
