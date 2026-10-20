@@ -13,4 +13,5 @@ const SECTIONS: readonly NavSection[] = [
 @Injectable({ providedIn: 'root' })
 export class PortfolioContent {
   readonly sections = SECTIONS;
+  readonly portrait = { alt: 'Portrait of Mark Jungeblut' } as const;
 }

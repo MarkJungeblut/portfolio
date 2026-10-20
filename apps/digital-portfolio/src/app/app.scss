@@ -2,9 +2,24 @@
 
 $glow: radial-gradient(120% 80% at 0% 100%, var(--color-glow), transparent 60%);
 
+// Narrow: one column, the portrait absolutely positioned behind it.
+// Wide: the split screen, content left and portrait right.
+:host {
+  position: relative;
+  display: block;
+
+  @media (min-width: $wide) {
+    display: grid;
+    grid-template-columns: 1fr minmax(380px, 60%);
+  }
+}
+
 // The content column: a warm glow at every width, plus the gradient surface
-// once the layout is wide.
+// once the layout is wide. Stacked above the narrow-layout portrait.
 main {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
   min-height: 100svh;
   padding-top: var(--header-height);
   background: $glow;

@@ -1,0 +1,61 @@
+@use 'breakpoints' as *;
+
+// The page dark at a given opacity, for the shades over the photo.
+@function dark($opacity) {
+  @return color-mix(in srgb, var(--color-dark) $opacity, transparent);
+}
+
+// Narrow: a backdrop filling the first screen behind the content, fading
+// into the page at the bottom. Wide: the sticky right-hand column, fading
+// into the content column on the left.
+:host {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  display: block;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-dark);
+
+  @media (min-width: $wide) {
+    position: sticky;
+    top: 0;
+    align-self: start;
+  }
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+
+  @media (min-width: $wide) {
+    object-position: 48% 22%;
+  }
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    dark(55%) 0%,
+    dark(5%) 22%,
+    dark(35%) 48%,
+    dark(92%) 72%,
+    var(--color-dark) 100%
+  );
+
+  @media (min-width: $wide) {
+    background: linear-gradient(
+      90deg,
+      dark(96%) 0%,
+      dark(45%) 22%,
+      dark(8%) 55%,
+      dark(22%) 100%
+    );
+  }
+}
