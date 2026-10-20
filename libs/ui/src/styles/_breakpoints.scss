@@ -1,0 +1,3 @@
+// The one layout breakpoint: narrow below, split screen from here up.
+// Mobile first, so use it only as `@media (min-width: $wide)`.
+$wide: 860px;

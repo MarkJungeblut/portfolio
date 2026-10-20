@@ -1,6 +1,4 @@
-// Mobile first: the base is the narrow layout; this widens it.
-// Also hard-coded in styles.scss and app.scss; not yet shared.
-$wide: 860px;
+@use 'breakpoints' as *;
 
 :host {
   display: contents;

@@ -22,6 +22,9 @@
           }
         ],
         "styles": ["apps/digital-portfolio/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/ui/src/styles"]
+        },
         "server": "apps/digital-portfolio/src/main.server.ts",
         "outputMode": "static"
       },

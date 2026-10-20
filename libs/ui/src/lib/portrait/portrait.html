@@ -1,0 +1,35 @@
+<!--
+  `sizes` cannot read Sass: 860px is $wide in libs/ui/src/styles/_breakpoints.scss.
+  The photo (2:3) covers a 100svh-tall box, so it renders at whichever is
+  larger: the box's width or two thirds of the viewport height.
+-->
+<picture>
+  <source
+    type="image/avif"
+    srcset="
+      /images/portrait-640.avif   640w,
+      /images/portrait-960.avif   960w,
+      /images/portrait-1280.avif 1280w,
+      /images/portrait-1600.avif 1600w,
+      /images/portrait-2000.avif 2000w
+    "
+    sizes="(min-width: 860px) max(60vw, 67vh), max(100vw, 67vh)"
+  />
+  <img
+    class="photo"
+    src="/images/portrait-1280.webp"
+    srcset="
+      /images/portrait-640.webp   640w,
+      /images/portrait-960.webp   960w,
+      /images/portrait-1280.webp 1280w,
+      /images/portrait-1600.webp 1600w,
+      /images/portrait-2000.webp 2000w
+    "
+    sizes="(min-width: 860px) max(60vw, 67vh), max(100vw, 67vh)"
+    alt="Portrait of Mark Jungeblut"
+    width="4672"
+    height="7008"
+    fetchpriority="high"
+  />
+</picture>
+<div class="shade" aria-hidden="true"></div>

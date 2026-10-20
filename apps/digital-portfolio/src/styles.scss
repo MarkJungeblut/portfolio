@@ -1,6 +1,7 @@
 // Self-hosted, never from Google Fonts: a German site must not leak visitor
 // IPs to a third party. Import only the weights in use.
 @use '@fontsource/montserrat/latin-400.css';
+@use 'breakpoints' as *;
 
 // Design tokens. Colours come from the brand guidelines in docs/design/,
 // which outrank the mockup's palette.
@@ -27,7 +28,7 @@
   --font-sans: Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-@media (min-width: 860px) {
+@media (min-width: $wide) {
   :root {
     --header-height: 104px;
   }

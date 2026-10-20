@@ -114,6 +114,10 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
 - **SSG:** the build uses `outputMode: "static"` and prerenders every route
   (`app.routes.server.ts`). The output in `dist/apps/digital-portfolio/browser`
   is plain HTML — there is no server bundle, and none should be added.
+- **Breakpoint:** the one layout breakpoint is `$wide` in
+  `libs/ui/src/styles/_breakpoints.scss`. It is on the app's Sass include path,
+  so any app or lib stylesheet uses `@use 'breakpoints' as *;`. Never re-type
+  `860px` in SCSS.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.
