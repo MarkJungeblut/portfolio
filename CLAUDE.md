@@ -9,10 +9,11 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Header built, sections not yet.** The Nx workspace, the app shell and all
-library shells exist with boundaries enforced. The site header (`libs/ui`) is
-done; the mobile menu overlay, scroll-spy and every page section are still to
-come. `/impressum` is an empty placeholder route.
+**Header and home section built.** The Nx workspace, the app shell and all
+library shells exist with boundaries enforced. The site header (`libs/ui`) and
+the home section (`libs/features/home`) are done; the mobile menu overlay,
+scroll-spy and the remaining page sections are still to come. `/impressum` is
+an empty placeholder route.
 
 ## Stack
 
@@ -43,6 +44,7 @@ apps/
   digital-portfolio/    type:app — the shell: routing, layout, global styles
 libs/
   features/
+    home/               type:feature
     impressum/          type:feature
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
@@ -51,7 +53,7 @@ tools/
   nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
-Section libs (`home`, `profile`, `skills`, `portfolio`, `contact`) are not
+The remaining section libs (`profile`, `skills`, `portfolio`, `contact`) are not
 scaffolded up front — generate each one (`type:feature`, `libs/features/<name>`,
 `@portfolio/features/<name>`) in the increment that builds it.
 
