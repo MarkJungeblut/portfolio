@@ -48,7 +48,9 @@
 }
 
 .intro {
-  max-width: 520px;
+  // The mockup's 520px, widened to fit "I am Mark Jungeblut" on one line:
+  // Montserrat 200 sets it 523px wide at 52px, where Barlow fitted.
+  max-width: 540px;
 }
 
 .eyebrow {
@@ -178,13 +180,20 @@
   @include label(10px, 0.2em);
 
   display: none;
-  gap: 0.5em;
+  gap: 0.6em;
 
   @media (min-width: $wide) {
     display: inline-flex;
     align-self: flex-start;
     margin-top: 56px;
   }
+}
+
+// Drawn, not a "↓" glyph: Montserrat has no arrows, and the fallback font's
+// came out tiny.
+.cue-arrow {
+  width: 8px;
+  height: 12px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

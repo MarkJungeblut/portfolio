@@ -36,6 +36,13 @@
   </ul>
 
   <a class="scroll-cue" routerLink="/" [fragment]="hero.scrollCue.section"
-    ><span aria-hidden="true">↓</span> {{ hero.scrollCue.label }}</a
+    ><svg
+      class="cue-arrow"
+      viewBox="0 0 8 12"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 0v11M1 8l3 3 3-3" fill="none" stroke="currentColor" /></svg
+    >{{ hero.scrollCue.label }}</a
   >
 </section>
