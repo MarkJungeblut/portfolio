@@ -33,8 +33,9 @@
 
 // Three stat tiles need about 431px ("Remote" at 30px plus padding, twice
 // over the gaps). Below that they stack, whatever the viewport: the wide
-// content column is narrower than that until about 1300px.
-$stats-row: 460px;
+// content column is narrower than that until about 1300px. Kept close to
+// the minimum so a classic scrollbar or zoom at 1440 doesn't tip it over.
+$stats-row: 440px;
 
 .content {
   max-width: 720px;

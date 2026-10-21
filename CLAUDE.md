@@ -121,7 +121,9 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
 - **Breakpoint:** the one layout breakpoint is `$wide` in
   `libs/ui/src/styles/_breakpoints.scss`. It is on the app's Sass include path,
   so any app or lib stylesheet uses `@use 'breakpoints' as *;`. Never re-type
-  `860px` in SCSS.
+  `860px` in SCSS. A component whose internal layout depends on its own width,
+  not the viewport's, uses a container query with a local threshold instead
+  (e.g. the profile stat grid); don't swap it for `$wide`.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.
