@@ -11,7 +11,7 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { headerOffset } from './header-offset';
+import { headerHeight } from './header-height';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAppInitializer(() => {
       const document = inject(DOCUMENT);
-      inject(ViewportScroller).setOffset(() => headerOffset(document));
+      inject(ViewportScroller).setOffset(() => [0, headerHeight(document)]);
     }),
   ],
 };

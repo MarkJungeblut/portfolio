@@ -1,6 +1,6 @@
 ---
 created: 2026-10-20
-updated: 2026-10-20
+updated: 2026-10-21
 ---
 
 # Plan: home section (hero)
@@ -233,10 +233,10 @@ Deviations found while building, all within the approved intent:
 
 - **Anchor offset fallback was needed.** `BrowserViewportScroller.scrollToElement`
   calls `window.scrollTo` with an explicit `top`, so CSS `scroll-padding-top`
-  is ignored. `apps/digital-portfolio/src/app/header-offset.ts` reads
+  is ignored. `apps/digital-portfolio/src/app/header-height.ts` reads
   `--header-height` on every scroll (it changes at `$wide`) and is wired via
   `provideAppInitializer` → `ViewportScroller.setOffset`. Being logic, it has a
-  spec (`header-offset.spec.ts`, 3 tests). The server uses
+  spec (`header-height.spec.ts`, 3 tests). The server uses
   `NullViewportScroller`, whose `setOffset` is a no-op.
 - **Hero types are exported, not private.** Lib typechecks emit declarations
   (TS4029), so `HomeSection.hero`'s type must be nameable. The interfaces are
@@ -267,7 +267,7 @@ From /review-implementation, applied with Mark's approval:
 
 Not changed, but added to manual verification: text contrast over the photo
 on narrow screens (eyebrow and lede, not just the socials), and re-clicking a
-fragment that's already in the URL. `headerOffset` using the global
+fragment that's already in the URL. `headerHeight` using the global
 `getComputedStyle` and assuming px is left as is.
 
 ## Post-review changes
@@ -287,3 +287,8 @@ Mark's call after the review:
   Mark chose to keep Montserrat (brand) and fix the layout.
 - **The scroll arrow is an inline SVG** (`.cue-arrow`, `aria-hidden`).
   Montserrat has no `↓` glyph, and the fallback font's came out tiny.
+- **`headerOffset` became `headerHeight`,** in PR review. It returns the
+  height as a `number`, and `app.config.ts` builds the `[x, y]` tuple that
+  `ViewportScroller.setOffset` requires: `[0, headerHeight(document)]`. The
+  function returns the one value it measures, and the 0 x-offset lives at
+  the one call that needs it.
