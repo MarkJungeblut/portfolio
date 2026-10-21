@@ -34,6 +34,20 @@ export interface HeroContent {
   readonly scrollCue: SectionLink;
 }
 
+/** A headline figure and what it counts. */
+export interface Stat {
+  readonly value: string;
+  readonly label: string;
+}
+
+/** Who Mark is, in a sentence, a paragraph and three figures. */
+export interface ProfileContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lede: string;
+  readonly stats: readonly Stat[];
+}
+
 /** Page sections in display order. */
 const SECTIONS: readonly NavSection[] = [
   { id: 'home', label: 'Home' },
@@ -59,8 +73,21 @@ const HERO: HeroContent = {
   scrollCue: { label: 'Scroll', section: 'profile' },
 };
 
+const PROFILE: ProfileContent = {
+  eyebrow: 'Profile',
+  title:
+    'More than a decade of turning tangled requirements into systems teams can actually run.',
+  lede: 'I work across the whole stack — domain modelling, service boundaries, delivery pipelines, and the interface people finally touch. Most of my work starts as an audit and ends as an architecture that survives the next three roadmaps.',
+  stats: [
+    { value: '14+', label: 'Years shipping' },
+    { value: '20', label: 'Developers in my org' },
+    { value: 'Remote', label: 'Germany · Oldenburg' },
+  ],
+};
+
 @Injectable({ providedIn: 'root' })
 export class PortfolioContent {
   readonly sections = SECTIONS;
   readonly hero = HERO;
+  readonly profile = PROFILE;
 }

@@ -1,0 +1,20 @@
+<section
+  class="profile"
+  id="profile"
+  tabindex="-1"
+  aria-labelledby="profile-title"
+>
+  <div class="content">
+    <p class="eyebrow">{{ profile.eyebrow }}</p>
+    <h2 class="title" id="profile-title">{{ profile.title }}</h2>
+    <p class="lede">{{ profile.lede }}</p>
+    <ul class="stats">
+      @for (stat of profile.stats; track stat.label) {
+      <li class="stat">
+        <span class="stat-value">{{ stat.value }}</span>
+        <span class="stat-label">{{ stat.label }}</span>
+      </li>
+      }
+    </ul>
+  </div>
+</section>

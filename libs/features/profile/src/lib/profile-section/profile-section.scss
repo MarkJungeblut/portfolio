@@ -1,0 +1,121 @@
+@use 'breakpoints' as *;
+
+// Shared by the uppercase micro-labels: the eyebrow and the stat labels.
+@mixin label($size, $tracking) {
+  font-size: $size;
+  letter-spacing: $tracking;
+  text-transform: uppercase;
+}
+
+:host {
+  display: block;
+}
+
+// Anchor scrolls already land below the fixed header, so the top padding is
+// the mockup's minus the header height. Wide fills the visible area under
+// the header; narrow is as tall as its content.
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 22px 40px;
+
+  // Focused programmatically after an anchor scroll; not itself interactive.
+  &:focus {
+    outline: none;
+  }
+
+  @media (min-width: $wide) {
+    min-height: calc(100svh - var(--header-height));
+    padding: 16px 48px 96px 56px;
+  }
+}
+
+// Three stat tiles need about 431px ("Remote" at 30px plus padding, twice
+// over the gaps). Below that they stack, whatever the viewport: the wide
+// content column is narrower than that until about 1300px.
+$stats-row: 460px;
+
+.content {
+  max-width: 720px;
+  container-type: inline-size;
+}
+
+.eyebrow {
+  @include label(11px, 0.28em);
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 22px;
+  color: var(--color-orange);
+
+  // Decorative rule leading into the label.
+  &::before {
+    content: '';
+    width: 34px;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-orange) 60%, transparent);
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 200;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+
+  @media (min-width: $wide) {
+    font-size: 38px;
+  }
+}
+
+.lede {
+  max-width: 560px;
+  margin: 24px 0 0;
+  color: var(--color-text-muted);
+  font-size: 15.5px;
+  font-weight: 300;
+  line-height: 1.75;
+  text-wrap: pretty;
+
+  @media (min-width: $wide) {
+    font-size: 16.5px;
+  }
+}
+
+// The 1px gap shows the hairline background between the tiles as dividers.
+.stats {
+  display: grid;
+  gap: 1px;
+  margin: 46px 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-hairline);
+
+  @container (min-width: #{$stats-row}) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 24px;
+  background: var(--color-dark);
+}
+
+.stat-value {
+  color: var(--color-orange);
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.stat-label {
+  @include label(10.5px, 0.18em);
+
+  color: var(--color-text-subtle);
+}

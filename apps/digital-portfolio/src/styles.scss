@@ -20,6 +20,7 @@
   --color-text-subtle: color-mix(in srgb, var(--color-cream) 55%, transparent);
   --color-outline: color-mix(in srgb, var(--color-cream) 50%, transparent);
   --color-underline: color-mix(in srgb, var(--color-cream) 24%, transparent);
+  --color-hairline: color-mix(in srgb, var(--color-cream) 12%, transparent);
 
   // Content column surface. The brand defines one dark; the gradient needs a
   // lighter and a deeper stop, so both are derived from it.

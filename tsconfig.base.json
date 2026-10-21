@@ -18,7 +18,8 @@
         "./libs/features/impressum/src/index.ts"
       ],
       "@portfolio/data": ["./libs/data/src/index.ts"],
-      "@portfolio/features/home": ["./libs/features/home/src/index.ts"]
+      "@portfolio/features/home": ["./libs/features/home/src/index.ts"],
+      "@portfolio/features/profile": ["./libs/features/profile/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
