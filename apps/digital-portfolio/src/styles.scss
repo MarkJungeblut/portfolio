@@ -1,5 +1,7 @@
 // Self-hosted, never from Google Fonts: a German site must not leak visitor
 // IPs to a third party. Import only the weights in use.
+@use '@fontsource/montserrat/latin-200.css';
+@use '@fontsource/montserrat/latin-300.css';
 @use '@fontsource/montserrat/latin-400.css';
 @use 'breakpoints' as *;
 
@@ -11,6 +13,13 @@
   --color-dark: #1c1009;
   --color-nav: rgb(254 247 238 / 82%);
   --color-header-bg: rgb(28 16 9 / 82%);
+
+  // Cream on dark at falling emphasis. Subtle is the floor for text: it
+  // keeps small labels above 4.5:1 contrast.
+  --color-text-muted: color-mix(in srgb, var(--color-cream) 66%, transparent);
+  --color-text-subtle: color-mix(in srgb, var(--color-cream) 55%, transparent);
+  --color-outline: color-mix(in srgb, var(--color-cream) 50%, transparent);
+  --color-underline: color-mix(in srgb, var(--color-cream) 24%, transparent);
 
   // Content column surface. The brand defines one dark; the gradient needs a
   // lighter and a deeper stop, so both are derived from it.
