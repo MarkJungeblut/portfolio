@@ -79,8 +79,10 @@ $groups-row: 440px;
 
   // The no-break space keeps the dot with the previous item, so a wrapped
   // line never starts with one. Empty alt text keeps screen readers from
-  // announcing it.
+  // announcing it; the first declaration is the fallback where alt text is
+  // unsupported, so items never run together.
   & + &::before {
+    content: '\a0· ';
     content: '\a0· ' / '';
   }
 }

@@ -12,7 +12,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class SectionHeading {
   readonly eyebrow = input.required<string>();
-  readonly title = input.required<string>();
+  readonly heading = input.required<string>();
   /** Referenced by the owning section's `aria-labelledby`. */
   readonly headingId = input.required<string>();
 }
