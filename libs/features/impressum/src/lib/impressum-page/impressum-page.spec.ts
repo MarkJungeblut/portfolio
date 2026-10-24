@@ -3,20 +3,25 @@ import { provideRouter, Router } from '@angular/router';
 import type { MockInstance } from 'vitest';
 import { ImpressumPage } from './impressum-page';
 
-/** Lets the dialog's queued `close` event fire. */
+/** Lets the dialog's queued `close` event and the navigation settle. */
 const nextTask = () => new Promise((resolve) => setTimeout(resolve));
+
+const { showModal, close } = HTMLDialogElement.prototype;
 
 describe('ImpressumPage', () => {
   let fixture: ComponentFixture<ImpressumPage>;
   let element: HTMLElement;
   let dialog: HTMLDialogElement;
-  let navigate: MockInstance<Router['navigateByUrl']>;
-  let showModal: MockInstance<HTMLDialogElement['showModal']>;
+  let router: Router;
+  let showModalSpy: MockInstance<HTMLDialogElement['showModal']>;
 
   beforeEach(async () => {
-    // jsdom has no dialog behaviour. Mimic the browser: close() fires its
-    // close event as a queued task, and only when the dialog was open.
+    // jsdom has no dialog behaviour. Mimic the browser: showModal() throws on
+    // a dialog already open non-modally, and close() fires its close event as
+    // a queued task, only when the dialog was open.
     HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+      if (this.open)
+        throw new DOMException('Already open', 'InvalidStateError');
       this.setAttribute('open', '');
     };
     HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
@@ -24,91 +29,138 @@ describe('ImpressumPage', () => {
       this.removeAttribute('open');
       setTimeout(() => this.dispatchEvent(new Event('close')));
     };
-    showModal = vi.spyOn(HTMLDialogElement.prototype, 'showModal');
+    showModalSpy = vi.spyOn(HTMLDialogElement.prototype, 'showModal');
 
     await TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [provideRouter([{ path: '**', children: [] }])],
     }).compileComponents();
 
-    navigate = vi
-      .spyOn(TestBed.inject(Router), 'navigateByUrl')
-      .mockResolvedValue(true);
+    router = TestBed.inject(Router);
+    await router.navigateByUrl('/impressum');
 
     fixture = TestBed.createComponent(ImpressumPage);
-    await fixture.whenStable();
     element = fixture.nativeElement;
     dialog = element.querySelector('dialog')!;
-    await nextTask();
   });
 
-  const closeLink = () =>
-    Array.from(element.querySelectorAll('a')).find((a) =>
-      a.textContent?.includes('Close'),
-    )!;
+  afterEach(() => {
+    HTMLDialogElement.prototype.showModal = showModal;
+    HTMLDialogElement.prototype.close = close;
+  });
 
-  it('renders a dialog named by its heading', () => {
-    const labelledBy = dialog.getAttribute('aria-labelledby')!;
+  /** Renders, upgrades and lets the upgrade's close event fire. */
+  const render = async () => {
+    await fixture.whenStable();
+    await nextTask();
+  };
 
-    expect(element.querySelector(`#${labelledBy}`)?.textContent).toBe(
-      'Angaben gemäß § 5 DDG',
+  const link = (name: string) =>
+    Array.from(element.querySelectorAll('a')).find(
+      (a) => a.textContent?.trim() === name,
     );
+
+  /** A press and release, each on its own element, like a drag. */
+  const press = (down: Element, up: Element = down) => {
+    down.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+    up.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  };
+
+  describe('once rendered', () => {
+    beforeEach(render);
+
+    it('renders a dialog named by its heading', () => {
+      const labelledBy = dialog.getAttribute('aria-labelledby')!;
+
+      expect(element.querySelector(`#${labelledBy}`)?.textContent).toBe(
+        'Angaben gemäß § 5 DDG',
+      );
+    });
+
+    it('shows the responsible person, contact and disclaimer', () => {
+      const terms = Array.from(dialog.querySelectorAll('dt'));
+      const detail = (term: string) =>
+        terms
+          .find((dt) => dt.textContent?.trim() === term)
+          ?.nextElementSibling?.textContent?.replace(/\s+/g, ' ')
+          .trim();
+
+      expect(detail('Verantwortlich')).toBe(
+        'Mark Jungeblut Tannenkampstraße 27 26160 Bad Zwischenahn Deutschland',
+      );
+      expect(detail('Kontakt')).toBe('E-Mail: mark.jungeblut@gmail.com');
+      expect(link('mark.jungeblut@gmail.com')?.getAttribute('href')).toBe(
+        'mailto:mark.jungeblut@gmail.com',
+      );
+      expect(detail('Haftungsausschluss')).toBe(
+        'Diese Website dient ausschließlich privaten Zwecken und enthält ' +
+          'keine kommerziellen Angebote. Alle Inhalte wurden mit größter ' +
+          'Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und ' +
+          'Aktualität der Inhalte wird keine Gewähr übernommen.',
+      );
+    });
+
+    it('opens as a modal', () => {
+      expect(showModalSpy).toHaveBeenCalledOnce();
+      expect(dialog.open).toBe(true);
+    });
+
+    it('stays on the route through the upgrade to modal', () => {
+      expect(router.url).toBe('/impressum');
+    });
+
+    it('closes to the home page from the Close link', async () => {
+      const close = link('Close ×')!;
+      expect(close.getAttribute('href')).toBe('/');
+
+      const click = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      });
+      close.dispatchEvent(click);
+      await nextTask();
+
+      expect(click.defaultPrevented).toBe(true);
+      expect(router.url).toBe('/');
+    });
+
+    it('closes on a backdrop click', async () => {
+      press(dialog);
+      await nextTask();
+
+      expect(router.url).toBe('/');
+    });
+
+    it('stays open on a click inside the panel', async () => {
+      press(element.querySelector('dd')!);
+      await nextTask();
+
+      expect(dialog.open).toBe(true);
+      expect(router.url).toBe('/impressum');
+    });
+
+    it('stays open on a drag from the panel released over the backdrop', async () => {
+      press(element.querySelector('dd')!, dialog);
+      await nextTask();
+
+      expect(dialog.open).toBe(true);
+      expect(router.url).toBe('/impressum');
+    });
+
+    it('leaves the route when the browser closes it, e.g. on Escape', async () => {
+      dialog.close();
+      await nextTask();
+
+      expect(router.url).toBe('/');
+    });
   });
 
-  it('shows the responsible person, contact and disclaimer', () => {
-    const text = dialog.textContent!;
-
-    expect(text).toContain('Mark Jungeblut');
-    expect(text).toContain('Tannenkampstraße 27');
-    expect(text).toContain('26160 Bad Zwischenahn');
-    expect(text).toContain('Haftungsausschluss');
-    expect(text).toContain('keine Gewähr übernommen');
-    const mail = Array.from(element.querySelectorAll('a')).find(
-      (a) => a.textContent?.trim() === 'mark.jungeblut@gmail.com',
-    );
-    expect(mail?.getAttribute('href')).toBe('mailto:mark.jungeblut@gmail.com');
-  });
-
-  it('opens as a modal once rendered', () => {
-    expect(showModal).toHaveBeenCalledOnce();
-    expect(dialog.open).toBe(true);
-  });
-
-  it('does not leave the route for the upgrade to modal', () => {
-    expect(navigate).not.toHaveBeenCalled();
-  });
-
-  it('closes to the home page from the Close link', async () => {
-    expect(closeLink().getAttribute('href')).toBe('/');
-
-    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
-    closeLink().dispatchEvent(click);
-    await nextTask();
-
-    expect(click.defaultPrevented).toBe(true);
-    expect(navigate).toHaveBeenCalledWith('/');
-  });
-
-  it('closes on a backdrop click', async () => {
-    dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    await nextTask();
-
-    expect(navigate).toHaveBeenCalledWith('/');
-  });
-
-  it('stays open on a click inside the panel', async () => {
-    element
-      .querySelector('dd')!
-      .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    await nextTask();
-
-    expect(dialog.open).toBe(true);
-    expect(navigate).not.toHaveBeenCalled();
-  });
-
-  it('leaves the route when the browser closes it, e.g. on Escape', async () => {
+  it('does not reopen a dialog closed before the upgrade', async () => {
+    // E.g. a click on Close made before hydration, replayed early.
     dialog.close();
-    await nextTask();
+    await render();
 
-    expect(navigate).toHaveBeenCalledWith('/');
+    expect(showModalSpy).not.toHaveBeenCalled();
+    expect(dialog.open).toBe(false);
+    expect(router.url).toBe('/');
   });
 });

@@ -7,6 +7,7 @@
   class="dialog"
   open
   aria-labelledby="impressum-title"
+  (pointerdown)="onDialogPointerDown($event)"
   (click)="onDialogClick($event)"
   (close)="onClose()"
 >
@@ -22,11 +23,7 @@
       />
       <dl class="details">
         <dt>{{ impressum.responsible.label }}</dt>
-        <dd>
-          @for (line of impressum.responsible.lines; track $index) {
-          <span class="line">{{ line }}</span>
-          }
-        </dd>
+        <dd class="address">{{ impressum.responsible.lines.join('\n') }}</dd>
         <dt>{{ impressum.contact.label }}</dt>
         <dd>
           {{ impressum.contact.prefix }}

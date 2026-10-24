@@ -18,6 +18,8 @@
   margin: 0;
   padding: 0;
   overflow-y: auto;
+  // Keep scrolling in the dialog from chaining to the page (iOS).
+  overscroll-behavior: contain;
   border: 0;
   background: var(--color-dark-lifted);
   color: inherit;
@@ -102,9 +104,9 @@
   }
 }
 
-// One line of the postal address.
-.line {
-  display: block;
+// The postal address keeps its line breaks, in copied text too.
+.address {
+  white-space: pre-line;
 }
 
 .mail {

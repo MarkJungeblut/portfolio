@@ -30,11 +30,15 @@ export class ImpressumPage {
   private readonly router = inject(Router);
   private readonly dialog =
     viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+  /** Whether the current press started on the backdrop. */
+  private pressedBackdrop = false;
 
   constructor() {
     afterNextRender(() => {
-      // showModal() throws on a dialog that is already open non-modally.
+      // Already closed, e.g. by a click replayed from before hydration.
       const dialog = this.dialog().nativeElement;
+      if (!dialog.open) return;
+      // showModal() throws on a dialog that is already open non-modally.
       dialog.close();
       dialog.showModal();
     });
@@ -45,10 +49,18 @@ export class ImpressumPage {
     this.dialog().nativeElement.close();
   }
 
-  /** Clicks on the backdrop target the dialog; the panel covers the rest. */
+  protected onDialogPointerDown(event: PointerEvent): void {
+    this.pressedBackdrop = event.target === this.dialog().nativeElement;
+  }
+
+  /**
+   * Clicks on the backdrop target the dialog; the panel covers the rest. So
+   * does a drag from the panel released over the backdrop, hence the press
+   * must have started there too.
+   */
   protected onDialogClick(event: MouseEvent): void {
     const dialog = this.dialog().nativeElement;
-    if (event.target === dialog) dialog.close();
+    if (this.pressedBackdrop && event.target === dialog) dialog.close();
   }
 
   protected onClose(): void {
