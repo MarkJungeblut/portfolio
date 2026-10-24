@@ -9,13 +9,14 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Header, home, profile, skills and portfolio sections built.** The Nx
-workspace, the app shell and all library shells exist with boundaries
-enforced. The site header (`libs/ui`) and the home, profile, skills and
-portfolio sections (`libs/features/home`, `libs/features/profile`,
-`libs/features/skills`, `libs/features/portfolio`) are done; the mobile menu
-overlay, scroll-spy and the contact section are still to come. `/impressum` is
-an empty placeholder route.
+**Header, home, profile, skills and portfolio sections and the Impressum
+overlay built.** The Nx workspace, the app shell and all library shells exist
+with boundaries enforced. The site header (`libs/ui`), the home, profile,
+skills and portfolio sections (`libs/features/home`, `libs/features/profile`,
+`libs/features/skills`, `libs/features/portfolio`) and the Impressum
+(`libs/features/impressum`) are done; the mobile menu overlay, scroll-spy and
+the contact section are still to come. Until the mobile menu exists, narrow
+screens have no link to the Impressum — the menu must carry one.
 
 ## Stack
 
@@ -87,6 +88,11 @@ Only two routes, both prerendered:
 |-------|------------|
 | `/` | The whole scrolling page — `features/home`, `profile`, `skills`, `portfolio`, `contact` stacked in order. In-page movement is anchor links plus scroll-spy, not the router |
 | `/impressum` | `features/impressum`, rendered as the overlay. Given a real URL because a German legal notice has to be directly linkable |
+
+The Impressum is a native `<dialog>`, prerendered `open` so it shows without
+JavaScript and upgraded with `showModal()` after render. Every way of closing
+ends in its `close` event, which navigates to `/`. The `<router-outlet>` sits
+outside `<main>`, after the portrait.
 
 Don't reach for the router to switch sections; that is what the scroll position
 is for.
@@ -201,7 +207,8 @@ mockup (`Musterstraße 1`, `DE000000000`), which must not be used.
 Note it declares the site private and non-commercial, which is why it carries no
 USt-IdNr. and no phone number — don't reintroduce the mockup's placeholder ones.
 A German Impressum is a legal requirement; treat changes to its wording as
-Mark's call, not an implementation detail.
+Mark's call, not an implementation detail. One such call: the heading cites
+§ 5 DDG, not the source's § 5 TMG, which the DDG replaced.
 
 The Skills section lists React/Next.js as Mark's skills — that is *content about
 Mark*, not a statement about this repository's stack.
