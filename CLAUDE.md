@@ -9,10 +9,11 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Header, home and profile sections built.** The Nx workspace, the app shell
-and all library shells exist with boundaries enforced. The site header
-(`libs/ui`) and the home and profile sections (`libs/features/home`,
-`libs/features/profile`) are done; the mobile menu overlay,
+**Header, home, profile and skills sections built.** The Nx workspace, the
+app shell and all library shells exist with boundaries enforced. The site
+header (`libs/ui`) and the home, profile and skills sections
+(`libs/features/home`, `libs/features/profile`, `libs/features/skills`) are
+done; the mobile menu overlay,
 scroll-spy and the remaining page sections are still to come. `/impressum` is
 an empty placeholder route.
 
@@ -47,6 +48,7 @@ libs/
   features/
     home/               type:feature
     profile/            type:feature
+    skills/             type:feature
     impressum/          type:feature
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
@@ -55,7 +57,7 @@ tools/
   nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
-The remaining section libs (`skills`, `portfolio`, `contact`) are not
+The remaining section libs (`portfolio`, `contact`) are not
 scaffolded up front — generate each one (`type:feature`, `libs/features/<name>`,
 `@portfolio/features/<name>`) in the increment that builds it.
 
@@ -124,6 +126,8 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   `860px` in SCSS. A component whose internal layout depends on its own width,
   not the viewport's, uses a container query with a local threshold instead
   (e.g. the profile stat grid); don't swap it for `$wide`.
+- **Section headings:** a section's ruled eyebrow and `h2` come from
+  `mj-section-heading` in `@portfolio/ui`; never rebuild them per section.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.
