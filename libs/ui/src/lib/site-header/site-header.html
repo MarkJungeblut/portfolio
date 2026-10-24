@@ -68,8 +68,9 @@
       routerLink="/"
       [fragment]="section.id"
       (click)="closeMenu()"
-      ><span class="menu-number">{{ itemNumber($index) }}</span>{{ section.label
-      }}</a
+      ><span class="menu-number" aria-hidden="true"
+        >{{ itemNumber($index) }}</span
+      >{{ section.label }}</a
     >
     }
   </nav>

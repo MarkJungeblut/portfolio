@@ -3,11 +3,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   input,
   signal,
   viewChild,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
+import { filter } from 'rxjs';
 import type { ExternalLink, NavSection } from '@portfolio/utils';
 
 /**
@@ -15,7 +23,9 @@ import type { ExternalLink, NavSection } from '@portfolio/utils';
  *
  * Narrow screens get the navigation as a full-screen menu, a modal dialog
  * for the top layer, inert page, focus trap and Escape. Every way of closing
- * ends in the dialog's `close` event, which resets the toggle.
+ * ends in the dialog's `close` event, which resets the toggle. Any
+ * navigation closes it too, e.g. a swipe back on iOS, which leaves an open
+ * dialog alone.
  */
 @Component({
   selector: 'mj-site-header',
@@ -34,19 +44,33 @@ export class SiteHeader {
   private readonly menu =
     viewChild.required<ElementRef<HTMLDialogElement>>('menu');
 
+  constructor() {
+    inject(Router)
+      .events.pipe(
+        filter((event) => event instanceof NavigationStart),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.closeMenu());
+  }
+
   /** Two-digit position of a menu item, e.g. "01". */
   protected itemNumber(index: number): string {
     return String(index + 1).padStart(2, '0');
   }
 
   protected openMenu(): void {
-    this.menu().nativeElement.showModal();
+    const menu = this.menu().nativeElement;
+    // A second tap replayed from before hydration finds it open, and older
+    // browsers throw on showModal() for an open dialog.
+    if (menu.open) return;
+    menu.showModal();
     this.menuOpen.set(true);
   }
 
   /** Links close the menu before their navigation runs. */
   protected closeMenu(): void {
-    this.menu().nativeElement.close();
+    const menu = this.menu().nativeElement;
+    if (menu.open) menu.close();
   }
 
   protected onMenuClose(): void {
