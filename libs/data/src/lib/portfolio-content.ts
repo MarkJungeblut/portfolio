@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import type { NavSection } from '@portfolio/utils';
+import type { ExternalLink, NavSection } from '@portfolio/utils';
 
 /** A link to a page section, by its element id. */
 export interface SectionLink {
   readonly label: string;
   readonly section: string;
-}
-
-/** A link off the site. */
-export interface ExternalLink {
-  readonly label: string;
-  readonly url: string;
 }
 
 /** A link that opens the visitor's mail client. */
