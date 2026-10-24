@@ -1,0 +1,26 @@
+<section
+  class="skills"
+  id="skills"
+  tabindex="-1"
+  aria-labelledby="skills-title"
+>
+  <div class="content">
+    <mj-section-heading
+      [eyebrow]="skills.eyebrow"
+      [heading]="skills.title"
+      headingId="skills-title"
+    />
+    <ul class="groups">
+      @for (group of skills.groups; track group.label) {
+      <li class="group">
+        <h3 class="group-label">{{ group.label }}</h3>
+        <ul class="items">
+          @for (item of group.items; track item) {
+          <li class="item">{{ item }}</li>
+          }
+        </ul>
+      </li>
+      }
+    </ul>
+  </div>
+</section>

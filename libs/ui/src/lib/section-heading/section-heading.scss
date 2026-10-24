@@ -1,0 +1,38 @@
+@use 'breakpoints' as *;
+
+:host {
+  display: block;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 22px;
+  color: var(--color-orange);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+
+  // Decorative rule leading into the label.
+  &::before {
+    content: '';
+    width: 34px;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-orange) 60%, transparent);
+  }
+}
+
+// No bottom margin: each section spaces whatever follows its heading.
+.title {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 200;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+
+  @media (min-width: $wide) {
+    font-size: 38px;
+  }
+}

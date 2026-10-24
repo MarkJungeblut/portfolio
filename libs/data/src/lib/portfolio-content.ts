@@ -48,6 +48,19 @@ export interface ProfileContent {
   readonly stats: readonly Stat[];
 }
 
+/** A named group of skills, e.g. "Backend". */
+export interface SkillGroup {
+  readonly label: string;
+  readonly items: readonly string[];
+}
+
+/** What Mark works with, in four groups. */
+export interface SkillsContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly groups: readonly SkillGroup[];
+}
+
 /** Page sections in display order. */
 const SECTIONS: readonly NavSection[] = [
   { id: 'home', label: 'Home' },
@@ -85,9 +98,60 @@ const PROFILE: ProfileContent = {
   ],
 };
 
+const SKILLS: SkillsContent = {
+  eyebrow: 'Skills',
+  title: 'The stack I reach for, and the parts I get called in to fix.',
+  groups: [
+    {
+      label: 'Architecture',
+      items: [
+        'Architectural Transformation',
+        'Domain Driven Design',
+        'Event Driven Design',
+        'Micro Service Architecture',
+      ],
+    },
+    {
+      label: 'Backend',
+      items: [
+        'C#',
+        'ASP.NET',
+        'Kotlin',
+        'Spring Boot',
+        'REST',
+        'gRPC',
+        'SQL',
+        'Pub/Sub',
+      ],
+    },
+    {
+      label: 'Frontend',
+      items: [
+        'TypeScript',
+        'Angular',
+        'React',
+        'Web Components',
+        'Module Federation',
+      ],
+    },
+    {
+      label: 'Platform',
+      items: [
+        'Google Cloud Platform',
+        'Azure',
+        'GitHub',
+        'Kubernetes',
+        'Prometheus',
+        'OpenTelemetry',
+      ],
+    },
+  ],
+};
+
 @Injectable({ providedIn: 'root' })
 export class PortfolioContent {
   readonly sections = SECTIONS;
   readonly hero = HERO;
   readonly profile = PROFILE;
+  readonly skills = SKILLS;
 }
