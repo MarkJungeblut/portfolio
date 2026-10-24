@@ -61,6 +61,27 @@ export interface SkillsContent {
   readonly groups: readonly SkillGroup[];
 }
 
+/** One role in Mark's career, e.g. "2020 — 2025 · Lead Developer · AVIATAR". */
+export interface Position {
+  readonly period: string;
+  readonly role: string;
+  readonly organisation: string;
+}
+
+/** A side commitment shown under the positions. */
+export interface Engagement {
+  readonly period: string;
+  readonly label: string;
+}
+
+/** Where Mark has worked, newest first. */
+export interface PortfolioSectionContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly positions: readonly Position[];
+  readonly engagement: Engagement;
+}
+
 /** Page sections in display order. */
 const SECTIONS: readonly NavSection[] = [
   { id: 'home', label: 'Home' },
@@ -148,10 +169,45 @@ const SKILLS: SkillsContent = {
   ],
 };
 
+const PORTFOLIO: PortfolioSectionContent = {
+  eyebrow: 'Portfolio',
+  title: 'Where I have been building',
+  positions: [
+    {
+      period: 'Since 2026',
+      role: 'Head of Backend Technologies',
+      organisation: 'Lufthansa Industry Solutions',
+    },
+    {
+      period: 'Since 2025',
+      role: 'Solution Architect',
+      organisation: 'Operation Decision Support Suite',
+    },
+    { period: '2020 — 2025', role: 'Lead Developer', organisation: 'AVIATAR' },
+    {
+      period: '2019 — 2020',
+      role: 'Full Stack Developer',
+      organisation: 'AVIATAR',
+    },
+    {
+      period: '2015 — 2019',
+      role: 'Fullstack Developer',
+      organisation: 'Orgadata AG',
+    },
+    {
+      period: '2012 — 2015',
+      role: 'Apprenticeship',
+      organisation: 'Orgadata AG',
+    },
+  ],
+  engagement: { period: 'Since 2022', label: 'Volunteer IHK examiner' },
+};
+
 @Injectable({ providedIn: 'root' })
 export class PortfolioContent {
   readonly sections = SECTIONS;
   readonly hero = HERO;
   readonly profile = PROFILE;
   readonly skills = SKILLS;
+  readonly portfolio = PORTFOLIO;
 }

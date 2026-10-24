@@ -20,7 +20,10 @@
       "@portfolio/data": ["./libs/data/src/index.ts"],
       "@portfolio/features/home": ["./libs/features/home/src/index.ts"],
       "@portfolio/features/profile": ["./libs/features/profile/src/index.ts"],
-      "@portfolio/features/skills": ["./libs/features/skills/src/index.ts"]
+      "@portfolio/features/skills": ["./libs/features/skills/src/index.ts"],
+      "@portfolio/features/portfolio": [
+        "./libs/features/portfolio/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

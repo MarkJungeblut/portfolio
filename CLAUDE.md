@@ -9,12 +9,12 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Header, home, profile and skills sections built.** The Nx workspace, the
-app shell and all library shells exist with boundaries enforced. The site
-header (`libs/ui`) and the home, profile and skills sections
-(`libs/features/home`, `libs/features/profile`, `libs/features/skills`) are
-done; the mobile menu overlay,
-scroll-spy and the remaining page sections are still to come. `/impressum` is
+**Header, home, profile, skills and portfolio sections built.** The Nx
+workspace, the app shell and all library shells exist with boundaries
+enforced. The site header (`libs/ui`) and the home, profile, skills and
+portfolio sections (`libs/features/home`, `libs/features/profile`,
+`libs/features/skills`, `libs/features/portfolio`) are done; the mobile menu
+overlay, scroll-spy and the contact section are still to come. `/impressum` is
 an empty placeholder route.
 
 ## Stack
@@ -49,6 +49,7 @@ libs/
     home/               type:feature
     profile/            type:feature
     skills/             type:feature
+    portfolio/          type:feature
     impressum/          type:feature
   data/                 type:data    — portfolio content + its types
   ui/                   type:ui      — presentational components, no state
@@ -57,12 +58,12 @@ tools/
   nx-plugins/           type:tool    — workspace tooling, never imported by app code
 ```
 
-The remaining section libs (`portfolio`, `contact`) are not
-scaffolded up front — generate each one (`type:feature`, `libs/features/<name>`,
+The remaining section lib (`contact`) is not
+scaffolded up front — generate it (`type:feature`, `libs/features/<name>`,
 `@portfolio/features/<name>`) in the increment that builds it.
 
-The app is `digital-portfolio`, not `portfolio`, so that the future
-`libs/features/portfolio` — the "Selected work" section — keeps the name the
+The app is `digital-portfolio`, not `portfolio`, so that
+`libs/features/portfolio` — the Portfolio section — keeps the name the
 design gives it. Nx project names must be unique; don't rename either one back.
 
 Module boundaries, enforced via `@nx/enforce-module-boundaries`:
@@ -128,6 +129,8 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   (e.g. the profile stat grid); don't swap it for `$wide`.
 - **Section headings:** a section's ruled eyebrow and `h2` come from
   `mj-section-heading` in `@portfolio/ui`; never rebuild them per section.
+  Its `<section>` shell (id, focus target, padding, height) comes from
+  `mj-page-section`; the section keeps only its content width.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.
