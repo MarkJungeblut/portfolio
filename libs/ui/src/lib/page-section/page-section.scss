@@ -1,0 +1,25 @@
+@use 'breakpoints' as *;
+
+:host {
+  display: block;
+}
+
+// Anchor scrolls already land below the fixed header, so the top padding is
+// the mockup's minus the header height. Wide fills the visible area under
+// the header; narrow is as tall as its content.
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 22px 40px;
+
+  // Focused programmatically after an anchor scroll; not itself interactive.
+  &:focus {
+    outline: none;
+  }
+
+  @media (min-width: $wide) {
+    min-height: calc(100svh - var(--header-height));
+    padding: 16px 48px 96px 56px;
+  }
+}
