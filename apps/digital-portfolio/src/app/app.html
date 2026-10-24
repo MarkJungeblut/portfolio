@@ -4,6 +4,8 @@
   <mj-profile-section />
   <mj-skills-section />
   <mj-portfolio-section />
-  <router-outlet />
 </main>
 <mj-portrait />
+<!-- Outside main: the Impressum overlay is not page content, and main's
+     stacking context would put it under the header without JavaScript. -->
+<router-outlet />

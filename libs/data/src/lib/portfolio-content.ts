@@ -82,6 +82,27 @@ export interface PortfolioSectionContent {
   readonly engagement: Engagement;
 }
 
+/** A labelled block of the legal notice, e.g. "Verantwortlich". */
+export interface ImpressumEntry {
+  readonly label: string;
+}
+
+/** The legal notice: who is responsible, how to reach him, the disclaimer. */
+export interface ImpressumContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  /** Name and postal address, one line each. */
+  readonly responsible: ImpressumEntry & { readonly lines: readonly string[] };
+  /** Rendered as "{prefix} {address}", the address as a mailto link. */
+  readonly contact: ImpressumEntry & {
+    readonly prefix: string;
+    readonly address: string;
+  };
+  readonly disclaimer: ImpressumEntry & { readonly text: string };
+}
+
+const MAIL_ADDRESS = 'mark.jungeblut@gmail.com';
+
 /** Page sections in display order. */
 const SECTIONS: readonly NavSection[] = [
   { id: 'home', label: 'Home' },
@@ -103,7 +124,7 @@ const HERO: HeroContent = {
     { label: 'GitHub', url: 'https://github.com/MarkJungeblut' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/mark-jungeblut/' },
   ],
-  mail: { label: 'Mail', address: 'mark.jungeblut@gmail.com' },
+  mail: { label: 'Mail', address: MAIL_ADDRESS },
   scrollCue: { label: 'Scroll', section: 'profile' },
 };
 
@@ -203,6 +224,27 @@ const PORTFOLIO: PortfolioSectionContent = {
   engagement: { period: 'Since 2022', label: 'Volunteer IHK examiner' },
 };
 
+// German wording from docs/mockup/ImpressumPage.tsx. The heading cites the
+// DDG, which replaced the TMG the source names. Changes are Mark's call.
+const IMPRESSUM: ImpressumContent = {
+  eyebrow: 'Impressum',
+  title: 'Angaben gemäß § 5 DDG',
+  responsible: {
+    label: 'Verantwortlich',
+    lines: [
+      'Mark Jungeblut',
+      'Tannenkampstraße 27',
+      '26160 Bad Zwischenahn',
+      'Deutschland',
+    ],
+  },
+  contact: { label: 'Kontakt', prefix: 'E-Mail:', address: MAIL_ADDRESS },
+  disclaimer: {
+    label: 'Haftungsausschluss',
+    text: 'Diese Website dient ausschließlich privaten Zwecken und enthält keine kommerziellen Angebote. Alle Inhalte wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird keine Gewähr übernommen.',
+  },
+};
+
 @Injectable({ providedIn: 'root' })
 export class PortfolioContent {
   readonly sections = SECTIONS;
@@ -210,4 +252,5 @@ export class PortfolioContent {
   readonly profile = PROFILE;
   readonly skills = SKILLS;
   readonly portfolio = PORTFOLIO;
+  readonly impressum = IMPRESSUM;
 }
