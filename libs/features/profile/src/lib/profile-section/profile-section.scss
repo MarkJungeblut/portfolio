@@ -1,6 +1,6 @@
 @use 'breakpoints' as *;
 
-// Shared by the uppercase micro-labels: the eyebrow and the stat labels.
+// Uppercase micro-label, for the stat labels.
 @mixin label($size, $tracking) {
   font-size: $size;
   letter-spacing: $tracking;
@@ -40,37 +40,6 @@ $stats-row: 440px;
 .content {
   max-width: 720px;
   container-type: inline-size;
-}
-
-.eyebrow {
-  @include label(11px, 0.28em);
-
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 0 0 22px;
-  color: var(--color-orange);
-
-  // Decorative rule leading into the label.
-  &::before {
-    content: '';
-    width: 34px;
-    height: 1px;
-    background: color-mix(in srgb, var(--color-orange) 60%, transparent);
-  }
-}
-
-.title {
-  margin: 0;
-  font-size: 27px;
-  font-weight: 200;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  text-wrap: pretty;
-
-  @media (min-width: $wide) {
-    font-size: 38px;
-  }
 }
 
 .lede {

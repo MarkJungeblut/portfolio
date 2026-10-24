@@ -5,8 +5,11 @@
   aria-labelledby="profile-title"
 >
   <div class="content">
-    <p class="eyebrow">{{ profile.eyebrow }}</p>
-    <h2 class="title" id="profile-title">{{ profile.title }}</h2>
+    <mj-section-heading
+      [eyebrow]="profile.eyebrow"
+      [title]="profile.title"
+      headingId="profile-title"
+    />
     <p class="lede">{{ profile.lede }}</p>
     <ul class="stats">
       @for (stat of profile.stats; track stat.label) {
