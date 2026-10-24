@@ -1,0 +1,22 @@
+<mj-page-section sectionId="portfolio" headingId="portfolio-title">
+  <div class="content">
+    <mj-section-heading
+      [eyebrow]="portfolio.eyebrow"
+      [heading]="portfolio.title"
+      headingId="portfolio-title"
+    />
+    <ol class="positions">
+      @for (position of portfolio.positions; track position) {
+      <li class="position">
+        <span class="period">{{ position.period }}</span>
+        <h3 class="role">{{ position.role }}</h3>
+        <span class="organisation">{{ position.organisation }}</span>
+      </li>
+      }
+    </ol>
+    <p class="engagement">
+      <span class="engagement-period">{{ portfolio.engagement.period }}</span>
+      <span class="engagement-label">{{ portfolio.engagement.label }}</span>
+    </p>
+  </div>
+</mj-page-section>
