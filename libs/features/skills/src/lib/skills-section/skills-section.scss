@@ -1,0 +1,86 @@
+@use 'breakpoints' as *;
+
+:host {
+  display: block;
+}
+
+// Anchor scrolls already land below the fixed header, so the top padding is
+// the mockup's minus the header height. Wide fills the visible area under
+// the header; narrow is as tall as its content.
+.skills {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 22px 40px;
+
+  // Focused programmatically after an anchor scroll; not itself interactive.
+  &:focus {
+    outline: none;
+  }
+
+  @media (min-width: $wide) {
+    min-height: calc(100svh - var(--header-height));
+    padding: 16px 48px 96px 56px;
+  }
+}
+
+// Two group columns need about 212px each for the longest words plus the
+// gap. The wide content column is narrower than that until about 1350px,
+// so the switch follows the content width, not the viewport.
+$groups-row: 440px;
+
+.content {
+  max-width: 760px;
+  container-type: inline-size;
+}
+
+.groups {
+  display: grid;
+  gap: 34px 48px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+
+  @container (min-width: #{$groups-row}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-rule);
+}
+
+.group-label {
+  margin: 0;
+  color: var(--color-orange);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+// A real list, set as flowing text with a dot between items.
+.items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-size: 15.5px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.item {
+  display: inline;
+
+  // The no-break space keeps the dot with the previous item, so a wrapped
+  // line never starts with one. Empty alt text keeps screen readers from
+  // announcing it.
+  & + &::before {
+    content: '\a0· ' / '';
+  }
+}
