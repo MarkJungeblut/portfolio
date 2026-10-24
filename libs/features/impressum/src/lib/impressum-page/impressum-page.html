@@ -1,0 +1,39 @@
+<!-- The click is the backdrop's light dismiss, a pointer affordance. Escape
+     and the Close link are its keyboard equivalents; a modal dialog manages
+     its own focus. -->
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+<dialog
+  #dialog
+  class="dialog"
+  open
+  aria-labelledby="impressum-title"
+  (pointerdown)="onDialogPointerDown($event)"
+  (click)="onDialogClick($event)"
+  (close)="onClose()"
+>
+  <div class="panel">
+    <a class="close" href="/" (click)="close($event)"
+      >Close <span aria-hidden="true">×</span></a
+    >
+    <div class="content" lang="de">
+      <mj-section-heading
+        [eyebrow]="impressum.eyebrow"
+        [heading]="impressum.title"
+        headingId="impressum-title"
+      />
+      <dl class="details">
+        <dt>{{ impressum.responsible.label }}</dt>
+        <dd class="address">{{ impressum.responsible.lines.join('\n') }}</dd>
+        <dt>{{ impressum.contact.label }}</dt>
+        <dd>
+          {{ impressum.contact.prefix }}
+          <a class="mail" [href]="'mailto:' + impressum.contact.address"
+            >{{ impressum.contact.address }}</a
+          >
+        </dd>
+        <dt>{{ impressum.disclaimer.label }}</dt>
+        <dd>{{ impressum.disclaimer.text }}</dd>
+      </dl>
+    </div>
+  </div>
+</dialog>
