@@ -3,10 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { ANCHOR_SCROLL_QUIET_MS, watchActiveSection } from './active-section';
 
-/** Waits out the quiet period that ends an anchor scroll. */
-const quiet = () =>
-  new Promise((resolve) => setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS + 50));
-
 @Component({
   template: `
     <section id="home"></section>
@@ -118,6 +114,16 @@ describe('watchActiveSection', () => {
 
     describe('following a link to a section', () => {
       const follow = (url: string) => TestBed.inject(Router).navigateByUrl(url);
+      /** Lets `ms` of scroll-free time pass. */
+      const wait = (ms: number) => vi.advanceTimersByTime(ms);
+
+      beforeEach(() => {
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
 
       it('marks the target at once', async () => {
         await follow('/#skills');
@@ -137,21 +143,33 @@ describe('watchActiveSection', () => {
         await follow('/#skills');
         layout(-1000, -200, 600);
         scroll();
-        await quiet();
+        wait(ANCHOR_SCROLL_QUIET_MS);
 
         expect(active()).toBe('profile');
       });
 
       it('keeps holding while the scroll goes on', async () => {
         await follow('/#skills');
-        await new Promise((resolve) =>
-          setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS - 50),
-        );
+        wait(ANCHOR_SCROLL_QUIET_MS - 1);
         layout(-1000, -200, 600);
         scroll();
-        await new Promise((resolve) =>
-          setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS - 50),
-        );
+        wait(ANCHOR_SCROLL_QUIET_MS - 1);
+
+        expect(active()).toBe('skills');
+
+        wait(1);
+
+        expect(active()).toBe('profile');
+      });
+
+      it('holds again on a repeat click of the link in the URL', async () => {
+        await follow('/#skills');
+        wait(ANCHOR_SCROLL_QUIET_MS);
+        expect(active()).toBe('home');
+
+        await follow('/#skills');
+        layout(-1000, -200, 600);
+        scroll();
 
         expect(active()).toBe('skills');
       });
@@ -167,7 +185,7 @@ describe('watchActiveSection', () => {
       it('drops a pending hold once destroyed', async () => {
         await follow('/#skills');
         fixture.destroy();
-        await quiet();
+        wait(ANCHOR_SCROLL_QUIET_MS);
 
         // A stray measurement would find no sections left and clear it.
         expect(active()).toBe('skills');

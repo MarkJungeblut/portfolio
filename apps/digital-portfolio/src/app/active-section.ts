@@ -6,9 +6,14 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import {
+  NavigationEnd,
+  NavigationSkipped,
+  NavigationSkippedCode,
+  Router,
+} from '@angular/router';
 import { activeSection } from '@portfolio/utils';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 /** The line a section's top must reach to count as in view, from the top. */
 const LINE = 0.35;
@@ -61,10 +66,22 @@ export function watchActiveSection(
       else frame ||= window.requestAnimationFrame(measure);
     };
 
+    // Every navigation the router follows with an anchor scroll, including
+    // a repeat click on the link already in the URL, which it skips.
     const navigations = router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        const target = router.parseUrl(event.urlAfterRedirects).fragment;
+      .pipe(
+        map((event) =>
+          event instanceof NavigationEnd
+            ? event.urlAfterRedirects
+            : event instanceof NavigationSkipped &&
+                event.code === NavigationSkippedCode.IgnoredSameUrlNavigation
+              ? event.url
+              : null,
+        ),
+        filter((url) => url !== null),
+      )
+      .subscribe((url) => {
+        const target = router.parseUrl(url).fragment;
         if (target === null || !ids.includes(target)) return;
         window.cancelAnimationFrame(frame);
         frame = 0;

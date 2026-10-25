@@ -183,6 +183,11 @@ describe('SiteHeader', () => {
       width: nav().style.getPropertyValue('--indicator-width'),
     });
     const sliding = () => nav().classList.contains('nav--sliding');
+    const animated = () => nav().classList.contains('nav--animated');
+
+    let frames: FrameRequestCallback[];
+    /** Runs the queued animation frames. */
+    const flushFrames = () => frames.splice(0).forEach((run) => run(0));
 
     const showSection = async (id: string | null) => {
       fixture.componentRef.setInput('activeSection', id);
@@ -190,6 +195,10 @@ describe('SiteHeader', () => {
     };
 
     beforeEach(() => {
+      frames = [];
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((run) =>
+        frames.push(run),
+      );
       boxes = {
         nav: { left: 100, top: 10, width: 600 },
         Profile: { left: 120, bottom: 40, width: 50 },
@@ -215,6 +224,25 @@ describe('SiteHeader', () => {
 
       expect(position()).toEqual({ x: '100px', y: '29px', width: '40' });
       expect(sliding()).toBe(true);
+    });
+
+    it('appears in place, then slides from the next move on', async () => {
+      await showSection('skills');
+
+      expect(animated()).toBe(false);
+
+      flushFrames();
+
+      expect(animated()).toBe(true);
+    });
+
+    it('appears in place again after being hidden, e.g. narrow and back', async () => {
+      await showSection('skills');
+      flushFrames();
+      await showSection(null);
+      await showSection('profile');
+
+      expect(animated()).toBe(false);
     });
 
     it('moves to the next current link', async () => {

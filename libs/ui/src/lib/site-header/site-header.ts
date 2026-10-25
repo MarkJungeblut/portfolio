@@ -65,6 +65,8 @@ export class SiteHeader {
   private readonly nav = viewChild.required<ElementRef<HTMLElement>>('nav');
   /** Bumped whenever the nav changes size: breakpoint, font swap. */
   private readonly navResized = signal(0);
+  /** Pending frame that turns the indicator's motion on. */
+  private animateFrame = 0;
 
   private readonly router = inject(Router);
   private readonly onImpressum = isActive('/impressum', this.router, {
@@ -92,13 +94,20 @@ export class SiteHeader {
         this.navResized.update((n) => n + 1),
       );
       observer.observe(this.nav().nativeElement);
-      destroyRef.onDestroy(() => observer.disconnect());
+      destroyRef.onDestroy(() => {
+        observer.disconnect();
+        cancelAnimationFrame(this.animateFrame);
+      });
     });
 
     afterRenderEffect({
       earlyRead: () => {
-        // Whatever moves aria-current, or the links, moves the indicator.
+        // The indicator follows aria-current, which these two decide, and
+        // the links' size. The Impressum's aria-current comes from
+        // RouterLinkActive in a microtask, outside the signal graph; it has
+        // landed by the time this phase runs after the navigation's render.
         this.currentSection();
+        this.onImpressum();
         this.navResized();
         return this.indicatorPosition();
       },
@@ -124,7 +133,9 @@ export class SiteHeader {
   private placeIndicator(position: IndicatorPosition | null): void {
     const nav = this.nav().nativeElement;
     if (!position) {
-      nav.classList.remove('nav--sliding');
+      // Hidden or nothing current: the next placement starts in place again.
+      cancelAnimationFrame(this.animateFrame);
+      nav.classList.remove('nav--sliding', 'nav--animated');
       return;
     }
     nav.style.setProperty('--indicator-x', `${position.x}px`);
@@ -133,7 +144,9 @@ export class SiteHeader {
     if (nav.classList.contains('nav--sliding')) return;
     nav.classList.add('nav--sliding');
     // Animate from the next move on: the first placement appears in place.
-    requestAnimationFrame(() => nav.classList.add('nav--animated'));
+    this.animateFrame = requestAnimationFrame(() =>
+      nav.classList.add('nav--animated'),
+    );
   }
 
   /** Two-digit position of a menu item, e.g. "01". */
