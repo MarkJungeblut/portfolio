@@ -141,6 +141,12 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   `mj-section-heading` in `@portfolio/ui`; never rebuild them per section.
   Its `<section>` shell (id, focus target, padding, height) comes from
   `mj-page-section`; the section keeps only its content width.
+- **Crawler files:** `robots.txt`, `llms.txt` and the static `404.html` live
+  in `apps/digital-portfolio/public/`. `llms.txt` and the meta description in
+  `src/index.html` restate content from `@portfolio/data` by hand, so update
+  them when that content changes. Lighthouse's "unused JavaScript" and
+  "network dependency tree" notes are Angular's runtime chunk and the single
+  document → `main.js` hop, and they are accepted, so don't chase them.
 - **Mobile menu:** a modal `<dialog>` owned by `mj-site-header`, opened with
   `showModal()` and never prerendered open. Its `close` event resets the
   toggle; every link in it closes it before navigating. It carries the
