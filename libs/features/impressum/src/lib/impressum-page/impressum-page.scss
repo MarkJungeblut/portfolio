@@ -73,8 +73,11 @@
     color: var(--color-orange);
   }
 
+  // The header's wide padding: the 44px box lands on the header row, right
+  // over the Impressum link that opened the dialog.
   @media (min-width: $wide) {
-    right: 30px;
+    top: 30px;
+    right: 56px;
   }
 }
 
