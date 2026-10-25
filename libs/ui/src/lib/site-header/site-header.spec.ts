@@ -7,6 +7,20 @@ const nextTask = () => new Promise((resolve) => setTimeout(resolve));
 
 const { showModal, close } = HTMLDialogElement.prototype;
 
+/** jsdom has no ResizeObserver; this one is triggered by hand. */
+class FakeResizeObserver {
+  static latest?: FakeResizeObserver;
+  constructor(readonly callback: () => void) {
+    FakeResizeObserver.latest = this;
+  }
+  observe(): void {
+    // Sizes only change when a test says so.
+  }
+  disconnect(): void {
+    // Nothing to release.
+  }
+}
+
 /** Text a screen reader announces: content minus `aria-hidden` parts. */
 const accessibleName = (el: Element) => {
   const copy = el.cloneNode(true) as Element;
@@ -19,6 +33,7 @@ describe('SiteHeader', () => {
   let element: HTMLElement;
 
   beforeEach(async () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
     // jsdom has no dialog behaviour. Mimic the browser: showModal() throws on
     // an open dialog (as older engines do), and close() fires its close event
     // as a queued task, only when the dialog was open.
@@ -52,6 +67,8 @@ describe('SiteHeader', () => {
   afterEach(() => {
     HTMLDialogElement.prototype.showModal = showModal;
     HTMLDialogElement.prototype.close = close;
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   const links = (scope: ParentNode) =>
@@ -98,6 +115,224 @@ describe('SiteHeader', () => {
       expect(link(element, 'Skip to content')?.getAttribute('href')).toBe(
         '#main',
       );
+    });
+  });
+
+  describe('section in view', () => {
+    const navs = () => [
+      element.querySelector('nav[aria-label="Main"]')!,
+      element.querySelector('nav[aria-label="Mobile"]')!,
+    ];
+
+    /** Names of the links marked current, per navigation. */
+    const current = () =>
+      navs().map((nav) =>
+        links(nav)
+          .filter(({ a }) => a.hasAttribute('aria-current'))
+          .map(({ name, a }) => [name, a.getAttribute('aria-current')]),
+      );
+
+    const showSection = async (id: string | null) => {
+      fixture.componentRef.setInput('activeSection', id);
+      await fixture.whenStable();
+    };
+
+    it('marks no section current by default', () => {
+      expect(current()).toEqual([[], []]);
+    });
+
+    it('marks the section in view as the current location in both navs', async () => {
+      await showSection('skills');
+
+      expect(current()).toEqual([
+        [['Skills', 'location']],
+        [['Skills', 'location']],
+      ]);
+    });
+
+    it('moves the mark when another section comes into view', async () => {
+      await showSection('skills');
+      await showSection('profile');
+
+      expect(current()).toEqual([
+        [['Profile', 'location']],
+        [['Profile', 'location']],
+      ]);
+    });
+
+    it('marks only the Impressum while it is open', async () => {
+      await showSection('skills');
+
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(current()).toEqual([[['Impressum', 'page']], []]);
+    });
+  });
+
+  describe('sliding indicator', () => {
+    const nav = () =>
+      element.querySelector<HTMLElement>('nav[aria-label="Main"]')!;
+
+    /** Label boxes in the wide nav, which itself starts at x = 100. */
+    let boxes: Record<string, Partial<DOMRect>>;
+
+    const position = () => ({
+      x: nav().style.getPropertyValue('--indicator-x'),
+      y: nav().style.getPropertyValue('--indicator-y'),
+      width: nav().style.getPropertyValue('--indicator-width'),
+    });
+    const sliding = () => nav().classList.contains('nav--sliding');
+    const animated = () => nav().classList.contains('nav--animated');
+
+    /** Queued animation frames, by id; cancelling one drops it. */
+    let frames: Map<number, FrameRequestCallback>;
+    /** Runs the queued animation frames. */
+    const flushFrames = () => {
+      const due = [...frames.values()];
+      frames.clear();
+      due.forEach((run) => run(0));
+    };
+
+    const showSection = async (id: string | null) => {
+      fixture.componentRef.setInput('activeSection', id);
+      await fixture.whenStable();
+    };
+
+    beforeEach(() => {
+      frames = new Map();
+      let lastFrame = 0;
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((run) => {
+        frames.set(++lastFrame, run);
+        return lastFrame;
+      });
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+        frames.delete(id);
+      });
+      boxes = {
+        nav: { left: 100, top: 10, width: 600 },
+        Profile: { left: 120, bottom: 40, width: 50 },
+        Skills: { left: 200, bottom: 40, width: 40 },
+        Impressum: { left: 400, bottom: 40, width: 80 },
+      };
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+        function (this: Element) {
+          const key = this.matches('nav') ? 'nav' : this.textContent!.trim();
+          return {
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 0,
+            ...boxes[key],
+          } as DOMRect;
+        },
+      );
+    });
+
+    it('sits on the current link’s rule', async () => {
+      await showSection('skills');
+
+      expect(position()).toEqual({ x: '100px', y: '29px', width: '40' });
+      expect(sliding()).toBe(true);
+    });
+
+    it('appears in place, then slides from the next move on', async () => {
+      await showSection('skills');
+
+      expect(animated()).toBe(false);
+
+      flushFrames();
+
+      expect(animated()).toBe(true);
+    });
+
+    it('appears in place again after being hidden, e.g. narrow and back', async () => {
+      await showSection('skills');
+      flushFrames();
+      await showSection(null);
+      await showSection('profile');
+
+      expect(animated()).toBe(false);
+    });
+
+    it('moves to the next current link', async () => {
+      await showSection('skills');
+      await showSection('profile');
+
+      expect(position()).toEqual({ x: '20px', y: '29px', width: '50' });
+    });
+
+    it('moves to the Impressum while it is open', async () => {
+      await showSection('skills');
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(position()).toEqual({ x: '300px', y: '29px', width: '80' });
+    });
+
+    it('hides when no link is current', async () => {
+      await showSection('skills');
+      await showSection(null);
+
+      expect(sliding()).toBe(false);
+    });
+
+    it('stays hidden while the nav is, on narrow screens', async () => {
+      boxes['nav'] = { ...boxes['nav'], width: 0 };
+      await showSection('skills');
+
+      expect(sliding()).toBe(false);
+    });
+
+    it('follows the links when the nav changes size', async () => {
+      await showSection('skills');
+      boxes['Skills'] = { left: 260, bottom: 40, width: 44 };
+      FakeResizeObserver.latest!.callback();
+      await fixture.whenStable();
+
+      expect(position()).toEqual({ x: '160px', y: '29px', width: '44' });
+    });
+
+    it('slides when another link becomes current', async () => {
+      await showSection('skills');
+      flushFrames();
+      await showSection('profile');
+
+      expect(animated()).toBe(true);
+    });
+
+    it('slides between a section and the Impressum', async () => {
+      await showSection('skills');
+      flushFrames();
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(position().x).toBe('300px');
+      expect(animated()).toBe(true);
+    });
+
+    it('stays still once hidden, however often the link changed before', async () => {
+      await showSection('skills');
+      await showSection('profile');
+      await showSection(null);
+      flushFrames();
+
+      // An orphaned frame from the first placement would turn motion on.
+      expect(animated()).toBe(false);
+    });
+
+    it('snaps, not slides, when only the layout moves its link, e.g. a font swap', async () => {
+      await showSection('skills');
+      flushFrames();
+      boxes['Skills'] = { left: 260, bottom: 40, width: 44 };
+      FakeResizeObserver.latest!.callback();
+      await fixture.whenStable();
+
+      expect(animated()).toBe(false);
+
+      flushFrames();
+
+      expect(animated()).toBe(true);
     });
   });
 

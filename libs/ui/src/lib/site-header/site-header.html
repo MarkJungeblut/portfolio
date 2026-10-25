@@ -9,10 +9,14 @@
     <ng-container [ngTemplateOutlet]="logo" />
   </a>
 
-  <nav class="nav" aria-label="Main">
+  <nav #nav class="nav" aria-label="Main">
     @for (section of sections(); track section.id) {
-    <a class="nav-link" routerLink="/" [fragment]="section.id"
-      >{{ section.label }}</a
+    <a
+      class="nav-link"
+      routerLink="/"
+      [fragment]="section.id"
+      [attr.aria-current]="section.id === currentSection() ? 'location' : null"
+      ><span class="nav-label">{{ section.label }}</span></a
     >
     }
     <a
@@ -20,8 +24,9 @@
       routerLink="/impressum"
       routerLinkActive
       ariaCurrentWhenActive="page"
-      >Impressum</a
+      ><span class="nav-label">Impressum</span></a
     >
+    <span class="nav-indicator" aria-hidden="true"></span>
   </nav>
 
   <button
@@ -68,6 +73,7 @@
       class="menu-link"
       routerLink="/"
       [fragment]="section.id"
+      [attr.aria-current]="section.id === currentSection() ? 'location' : null"
       (click)="closeMenu()"
       ><span class="menu-number" aria-hidden="true"
         >{{ itemNumber($index) }}</span

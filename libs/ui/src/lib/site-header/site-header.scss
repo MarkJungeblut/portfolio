@@ -68,6 +68,7 @@
   display: none;
 
   @media (min-width: $wide) {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 30px;
@@ -81,19 +82,57 @@
   align-items: center;
   min-height: 44px;
   color: var(--color-nav);
-  text-decoration-line: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
 
   &:hover,
   &:focus-visible {
     color: var(--color-orange);
   }
 
-  &[aria-current] {
+  // The current link lights up with the indicator, or without JavaScript.
+  // Not straight from the prerendered aria-current, which is Home until the
+  // page has settled on its real section.
+  .nav--sliding > &[aria-current] {
     color: var(--color-orange);
-    text-decoration-color: var(--color-orange);
+  }
+
+  @media (scripting: none) {
+    &[aria-current] {
+      color: var(--color-orange);
+    }
+  }
+}
+
+// The current link's rule, only without JavaScript. With it, the sliding
+// indicator is the one marker; a prerendered rule would mark Home until the
+// page has settled on its real section, then jump.
+.nav-label {
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+
+  @media (scripting: none) {
+    [aria-current] > & {
+      border-bottom-color: var(--color-orange);
+    }
+  }
+}
+
+// A 1px dot stretched to the current label: transform only, so sliding
+// never triggers layout. Placed by SiteHeader through the custom properties.
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: var(--color-orange);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(var(--indicator-x, 0), var(--indicator-y, 0))
+    scaleX(var(--indicator-width, 0));
+  transform-origin: 0 0;
+
+  .nav--sliding > & {
+    opacity: 1;
   }
 }
 
@@ -216,7 +255,8 @@
   font-weight: 200;
 
   &:hover,
-  &:focus-visible {
+  &:focus-visible,
+  &[aria-current] {
     color: var(--color-orange);
   }
 }
@@ -261,10 +301,16 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .nav-link {
+  // Only once placed, so the indicator doesn't fly in after hydration and
+  // the current link's text lights up with it, not after it.
+  .nav--animated > .nav-link {
+    transition: color 0.3s ease;
+  }
+
+  .nav--animated > .nav-indicator {
     transition:
-      color 0.3s ease,
-      text-decoration-color 0.3s ease;
+      transform 0.3s ease,
+      opacity 0.3s ease;
   }
 
   .menu-close,
