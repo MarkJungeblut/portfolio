@@ -11,7 +11,11 @@
 
   <nav class="nav" aria-label="Main">
     @for (section of sections(); track section.id) {
-    <a class="nav-link" routerLink="/" [fragment]="section.id"
+    <a
+      class="nav-link"
+      routerLink="/"
+      [fragment]="section.id"
+      [attr.aria-current]="section.id === currentSection() ? 'location' : null"
       >{{ section.label }}</a
     >
     }
@@ -68,6 +72,7 @@
       class="menu-link"
       routerLink="/"
       [fragment]="section.id"
+      [attr.aria-current]="section.id === currentSection() ? 'location' : null"
       (click)="closeMenu()"
       ><span class="menu-number" aria-hidden="true"
         >{{ itemNumber($index) }}</span

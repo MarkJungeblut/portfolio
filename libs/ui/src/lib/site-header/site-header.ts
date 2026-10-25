@@ -2,6 +2,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
   input,
@@ -10,6 +11,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  isActive,
   NavigationStart,
   Router,
   RouterLink,
@@ -26,6 +28,9 @@ import type { ExternalLink, NavSection } from '@portfolio/utils';
  * ends in the dialog's `close` event, which resets the toggle. Any
  * navigation closes it too, e.g. a swipe back on iOS, which leaves an open
  * dialog alone.
+ *
+ * The section in view is marked current in both navigations, except while
+ * the Impressum is open: then only its link is.
  */
 @Component({
   selector: 'mj-site-header',
@@ -39,14 +44,28 @@ export class SiteHeader {
   readonly sections = input.required<readonly NavSection[]>();
   /** Off-site profiles, listed in the mobile menu. */
   readonly socials = input.required<readonly ExternalLink[]>();
+  /** Id of the section in view, if any. */
+  readonly activeSection = input<string | null>(null);
 
   protected readonly menuOpen = signal(false);
   private readonly menu =
     viewChild.required<ElementRef<HTMLDialogElement>>('menu');
 
+  private readonly router = inject(Router);
+  private readonly onImpressum = isActive('/impressum', this.router, {
+    paths: 'exact',
+    queryParams: 'ignored',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+  });
+  /** Id of the section whose links are marked current. */
+  protected readonly currentSection = computed(() =>
+    this.onImpressum() ? null : this.activeSection(),
+  );
+
   constructor() {
-    inject(Router)
-      .events.pipe(
+    this.router.events
+      .pipe(
         filter((event) => event instanceof NavigationStart),
         takeUntilDestroyed(),
       )

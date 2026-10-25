@@ -101,6 +101,58 @@ describe('SiteHeader', () => {
     });
   });
 
+  describe('section in view', () => {
+    const navs = () => [
+      element.querySelector('nav[aria-label="Main"]')!,
+      element.querySelector('nav[aria-label="Mobile"]')!,
+    ];
+
+    /** Names of the links marked current, per navigation. */
+    const current = () =>
+      navs().map((nav) =>
+        links(nav)
+          .filter(({ a }) => a.hasAttribute('aria-current'))
+          .map(({ name, a }) => [name, a.getAttribute('aria-current')]),
+      );
+
+    const showSection = async (id: string | null) => {
+      fixture.componentRef.setInput('activeSection', id);
+      await fixture.whenStable();
+    };
+
+    it('marks no section current by default', () => {
+      expect(current()).toEqual([[], []]);
+    });
+
+    it('marks the section in view as the current location in both navs', async () => {
+      await showSection('skills');
+
+      expect(current()).toEqual([
+        [['Skills', 'location']],
+        [['Skills', 'location']],
+      ]);
+    });
+
+    it('moves the mark when another section comes into view', async () => {
+      await showSection('skills');
+      await showSection('profile');
+
+      expect(current()).toEqual([
+        [['Profile', 'location']],
+        [['Profile', 'location']],
+      ]);
+    });
+
+    it('marks only the Impressum while it is open', async () => {
+      await showSection('skills');
+
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(current()).toEqual([[['Impressum', 'page']], []]);
+    });
+  });
+
   describe('mobile menu', () => {
     it('starts closed', () => {
       expect(menu().open).toBe(false);
