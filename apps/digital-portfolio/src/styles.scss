@@ -71,6 +71,9 @@ a {
 
 html {
   scroll-padding-top: var(--header-height);
+  // No grey box over tapped links and buttons (Android Chrome); each control
+  // gives its own feedback. Inherited, so this covers every lib.
+  -webkit-tap-highlight-color: transparent;
 }
 
 // An open dialog owns the scroll; CSS, so it holds before hydration too.

@@ -1,0 +1,13 @@
+// Focus-visible always; hover only where a pointer can actually hover, so a
+// tap on touch screens doesn't leave the state stuck on.
+@mixin active {
+  &:focus-visible {
+    @content;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
