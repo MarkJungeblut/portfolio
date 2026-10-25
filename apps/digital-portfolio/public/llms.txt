@@ -1,0 +1,21 @@
+# Mark Jungeblut
+
+> Mark Jungeblut is a software architect who designs robust, scalable systems end to end, from data model to interface.
+
+This is Mark's personal portfolio: a single page with his profile, career history, skills and selected work.
+
+## Site
+
+- [Home](https://www.markjungeblut.de/): Introduction and contact links
+- [Profile](https://www.markjungeblut.de/#profile): Background and career history
+- [Skills](https://www.markjungeblut.de/#skills): Technologies and areas of expertise
+- [Portfolio](https://www.markjungeblut.de/#portfolio): Selected projects
+
+## Elsewhere
+
+- [GitHub](https://github.com/MarkJungeblut): Code and open-source work
+- [LinkedIn](https://www.linkedin.com/in/mark-jungeblut/): Professional profile
+
+## Optional
+
+- [Impressum](https://www.markjungeblut.de/impressum): Legal notice (German)
