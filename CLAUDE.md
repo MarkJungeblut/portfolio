@@ -10,9 +10,9 @@ left, full-bleed portrait on the right.
 ## Status
 
 **Header with mobile menu and scroll-spy, home, profile, skills and portfolio
-sections and the Impressum overlay built.** The Nx workspace, the app shell and all library
-shells exist with boundaries enforced. The site header and its mobile menu
-(`libs/ui`), the home, profile, skills and portfolio sections
+sections and the Impressum overlay built.** The Nx workspace, the app shell
+and all library shells exist with boundaries enforced. The site header and
+its mobile menu (`libs/ui`), the home, profile, skills and portfolio sections
 (`libs/features/home`, `libs/features/profile`, `libs/features/skills`,
 `libs/features/portfolio`) and the Impressum (`libs/features/impressum`) are
 done; the contact section is still to come.
@@ -147,7 +147,9 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   (`watchActiveSection` in `apps/digital-portfolio/src/app/active-section.ts`,
   the mockup's 35%-of-viewport line) and passes it to `mj-site-header`, which
   marks that link `aria-current="location"` in both navs. Not on
-  `/impressum`, where only the Impressum link is current.
+  `/impressum`, where only the Impressum link is current. It measures only
+  the ids it is given, today the nav sections: when Contact lands, pass every
+  section id, or Portfolio stays marked while Contact is in view.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.

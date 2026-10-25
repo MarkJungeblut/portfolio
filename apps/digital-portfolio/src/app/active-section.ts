@@ -43,7 +43,7 @@ export function watchActiveSection(
 
     measure();
     window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
     destroyRef.onDestroy(() => {
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
