@@ -84,9 +84,21 @@
   color: var(--color-nav);
 
   &:hover,
-  &:focus-visible,
-  &[aria-current] {
+  &:focus-visible {
     color: var(--color-orange);
+  }
+
+  // The current link lights up with the indicator, or without JavaScript.
+  // Not straight from the prerendered aria-current, which is Home until the
+  // page has settled on its real section.
+  .nav--sliding > &[aria-current] {
+    color: var(--color-orange);
+  }
+
+  @media (scripting: none) {
+    &[aria-current] {
+      color: var(--color-orange);
+    }
   }
 }
 
@@ -289,11 +301,12 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .nav-link {
+  // Only once placed, so the indicator doesn't fly in after hydration and
+  // the current link's text lights up with it, not after it.
+  .nav--animated > .nav-link {
     transition: color 0.3s ease;
   }
 
-  // Only once placed, so the indicator doesn't fly in after hydration.
   .nav--animated > .nav-indicator {
     transition:
       transform 0.3s ease,

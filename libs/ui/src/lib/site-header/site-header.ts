@@ -67,6 +67,8 @@ export class SiteHeader {
   private readonly navResized = signal(0);
   /** Pending frame that turns the indicator's motion on. */
   private animateFrame = 0;
+  /** What the indicator last marked: a section id, or the Impressum. */
+  private placedFor?: string;
 
   private readonly router = inject(Router);
   private readonly onImpressum = isActive('/impressum', this.router, {
@@ -106,12 +108,16 @@ export class SiteHeader {
         // the links' size. The Impressum's aria-current comes from
         // RouterLinkActive in a microtask, outside the signal graph; it has
         // landed by the time this phase runs after the navigation's render.
-        this.currentSection();
-        this.onImpressum();
+        const current = this.onImpressum()
+          ? 'impressum'
+          : this.currentSection();
         this.navResized();
-        return this.indicatorPosition();
+        return { current, position: this.indicatorPosition() };
       },
-      write: (position) => this.placeIndicator(position()),
+      write: (measured) => {
+        const { current, position } = measured();
+        this.placeIndicator(position, current ?? undefined);
+      },
     });
   }
 
@@ -130,20 +136,36 @@ export class SiteHeader {
     };
   }
 
-  private placeIndicator(position: IndicatorPosition | null): void {
+  /**
+   * Slides the indicator only when it moves to another link. Appearing, and
+   * following its own link when the layout shifts (font swap, resize), it
+   * snaps, together with the text.
+   */
+  private placeIndicator(
+    position: IndicatorPosition | null,
+    current: string | undefined,
+  ): void {
     const nav = this.nav().nativeElement;
-    if (!position) {
-      // Hidden or nothing current: the next placement starts in place again.
+    const placedFor = this.placedFor;
+    this.placedFor = position ? current : undefined;
+    if (
+      !position ||
+      !nav.classList.contains('nav--sliding') ||
+      current === placedFor
+    ) {
       cancelAnimationFrame(this.animateFrame);
-      nav.classList.remove('nav--sliding', 'nav--animated');
+      nav.classList.remove('nav--animated');
+    }
+    if (!position) {
+      nav.classList.remove('nav--sliding');
       return;
     }
     nav.style.setProperty('--indicator-x', `${position.x}px`);
     nav.style.setProperty('--indicator-y', `${position.y}px`);
     nav.style.setProperty('--indicator-width', `${position.width}`);
-    if (nav.classList.contains('nav--sliding')) return;
     nav.classList.add('nav--sliding');
-    // Animate from the next move on: the first placement appears in place.
+    if (nav.classList.contains('nav--animated')) return;
+    // Animate from the next move on.
     this.animateFrame = requestAnimationFrame(() =>
       nav.classList.add('nav--animated'),
     );

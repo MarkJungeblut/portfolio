@@ -282,6 +282,28 @@ describe('SiteHeader', () => {
 
       expect(position()).toEqual({ x: '160px', y: '29px', width: '44' });
     });
+
+    it('slides when another link becomes current', async () => {
+      await showSection('skills');
+      flushFrames();
+      await showSection('profile');
+
+      expect(animated()).toBe(true);
+    });
+
+    it('snaps, not slides, when only the layout moves its link, e.g. a font swap', async () => {
+      await showSection('skills');
+      flushFrames();
+      boxes['Skills'] = { left: 260, bottom: 40, width: 44 };
+      FakeResizeObserver.latest!.callback();
+      await fixture.whenStable();
+
+      expect(animated()).toBe(false);
+
+      flushFrames();
+
+      expect(animated()).toBe(true);
+    });
   });
 
   describe('mobile menu', () => {
