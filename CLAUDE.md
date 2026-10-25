@@ -133,6 +133,10 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   `860px` in SCSS. A component whose internal layout depends on its own width,
   not the viewport's, uses a container query with a local threshold instead
   (e.g. the profile stat grid); don't swap it for `$wide`.
+- **Hover and tap:** hover styles go through the `active` mixin
+  (`@use 'interaction' as *;`, also on the Sass include path), never bare
+  `:hover`, so taps don't leave states stuck on touch screens. The browser
+  tap highlight is off globally in `styles.scss`.
 - **Section headings:** a section's ruled eyebrow and `h2` come from
   `mj-section-heading` in `@portfolio/ui`; never rebuild them per section.
   Its `<section>` shell (id, focus target, padding, height) comes from
