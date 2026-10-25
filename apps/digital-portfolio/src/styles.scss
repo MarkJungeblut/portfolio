@@ -36,12 +36,18 @@
   // Fixed header: 44px tap target plus vertical padding (12px, 30px wide).
   --header-height: 68px;
 
+  // Narrow hero and portrait height: one screen, but never so short that the
+  // bottom-aligned hero copy rises over the face. A phone browser's toolbars
+  // leave ~660px; the floor keeps the layout a full-screen phone shows.
+  --hero-height: max(100svh, 850px);
+
   --font-sans: Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 @media (min-width: $wide) {
   :root {
     --header-height: 104px;
+    --hero-height: 100svh;
   }
 }
 
