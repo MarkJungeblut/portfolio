@@ -40,13 +40,6 @@
   max-width: 540px;
 }
 
-.eyebrow {
-  @include label(11px, 0.28em);
-
-  margin: 0 0 26px;
-  color: var(--color-orange);
-}
-
 .title {
   margin: 0;
   font-size: 36px;

@@ -15,7 +15,6 @@ export interface MailLink {
 
 /** The first screen: who Mark is, and the ways onward. */
 export interface HeroContent {
-  readonly eyebrow: string;
   /** The heading reads "{name}", line break, "{rolePrefix} {role}". */
   readonly name: string;
   readonly rolePrefix: string;
@@ -106,7 +105,6 @@ const SECTIONS: readonly NavSection[] = [
 ];
 
 const HERO: HeroContent = {
-  eyebrow: 'Portfolio 2026',
   name: 'I am Mark Jungeblut',
   rolePrefix: 'and I am a',
   role: 'Software Architect',
