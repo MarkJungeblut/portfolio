@@ -90,18 +90,17 @@
   }
 }
 
-// The current link's rule, before hydration and without JavaScript. Once
-// the header can measure, one sliding indicator takes over from it.
+// The current link's rule, only without JavaScript. With it, the sliding
+// indicator is the one marker; a prerendered rule would mark Home until the
+// page has settled on its real section, then jump.
 .nav-label {
   padding-bottom: 4px;
   border-bottom: 1px solid transparent;
 
-  [aria-current] > & {
-    border-bottom-color: var(--color-orange);
-  }
-
-  .nav--sliding [aria-current] > & {
-    border-bottom-color: transparent;
+  @media (scripting: none) {
+    [aria-current] > & {
+      border-bottom-color: var(--color-orange);
+    }
   }
 }
 

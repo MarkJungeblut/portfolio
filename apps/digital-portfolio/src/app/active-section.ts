@@ -18,13 +18,18 @@ import { filter, map } from 'rxjs';
 /** The line a section's top must reach to count as in view, from the top. */
 const LINE = 0.35;
 
-/** Scroll-free time, in ms, after which an anchor scroll counts as done. */
+/**
+ * Scroll-free time, in ms, after which an anchor scroll, or the page settling
+ * after load, counts as done.
+ */
 export const ANCHOR_SCROLL_QUIET_MS = 150;
 
 /**
  * Id of the section in view, among `ids` in page order. Starts at the first,
- * which is what the prerendered page shows; measured in the browser only,
- * after the first render, then once a frame while scrolling or resizing.
+ * which is what the prerendered page marks for readers without JavaScript.
+ * In the browser it is `null` from hydration until the page has settled
+ * (the initial anchor scroll or a restored scroll position), then measured
+ * once a frame while scrolling or resizing.
  *
  * Following a link to a section marks it at once and holds it until the
  * anchor scroll has gone quiet, so the sections scrolled past on the way
@@ -89,7 +94,10 @@ export function watchActiveSection(
         holdUntilQuiet();
       });
 
-    measure();
+    // Marking the first section now would mean jumping away from it once
+    // the load's own scroll lands; mark nothing until it has.
+    active.set(null);
+    holdUntilQuiet();
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     destroyRef.onDestroy(() => {

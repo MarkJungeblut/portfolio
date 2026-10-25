@@ -32,7 +32,11 @@ describe('watchActiveSection', () => {
     flushFrames();
   };
 
+  /** Lets `ms` of scroll-free time pass. */
+  const wait = (ms: number) => vi.advanceTimersByTime(ms);
+
   beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     frames = [];
     vi.spyOn(window, 'requestAnimationFrame').mockImplementation((run) =>
       frames.push(run),
@@ -53,33 +57,54 @@ describe('watchActiveSection', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
   const active = () => fixture.componentInstance.active();
 
-  /** Renders the host, then forgets the measurements made doing so. */
-  const render = async () => {
-    await fixture.whenStable();
-    flushFrames();
-    measure.mockClear();
-  };
+  /** Renders the host, i.e. hydrates it in the browser. */
+  const render = () => fixture.detectChanges();
 
-  it('starts at the first section before measuring, as prerendered', () => {
-    layout(-1700, -900, -100);
-
+  it('starts at the first section, as prerendered for readers without JavaScript', () => {
     expect(active()).toBe('home');
   });
 
-  it('measures once rendered, e.g. after a reload scrolled to a section', async () => {
+  it('marks nothing from hydration until the page has settled', () => {
+    render();
+
+    expect(active()).toBeNull();
+  });
+
+  it('marks the section in view once settled, e.g. after a reload at a section', () => {
     layout(-1700, -900, -100);
-    await render();
+    render();
+    wait(ANCHOR_SCROLL_QUIET_MS);
 
     expect(active()).toBe('skills');
   });
 
-  describe('once rendered', () => {
-    beforeEach(render);
+  it('keeps waiting while the load’s own scroll goes on', () => {
+    render();
+    wait(ANCHOR_SCROLL_QUIET_MS - 1);
+    layout(-1700, -900, -100);
+    scroll();
+    wait(ANCHOR_SCROLL_QUIET_MS - 1);
+
+    expect(active()).toBeNull();
+
+    wait(1);
+
+    expect(active()).toBe('skills');
+  });
+
+  describe('once settled', () => {
+    beforeEach(() => {
+      render();
+      wait(ANCHOR_SCROLL_QUIET_MS);
+      flushFrames();
+      measure.mockClear();
+    });
 
     it('follows the section whose top passed the line while scrolling', () => {
       layout(-1000, -200, 600);
@@ -114,16 +139,6 @@ describe('watchActiveSection', () => {
 
     describe('following a link to a section', () => {
       const follow = (url: string) => TestBed.inject(Router).navigateByUrl(url);
-      /** Lets `ms` of scroll-free time pass. */
-      const wait = (ms: number) => vi.advanceTimersByTime(ms);
-
-      beforeEach(() => {
-        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
-      });
-
-      afterEach(() => {
-        vi.useRealTimers();
-      });
 
       it('marks the target at once', async () => {
         await follow('/#skills');
