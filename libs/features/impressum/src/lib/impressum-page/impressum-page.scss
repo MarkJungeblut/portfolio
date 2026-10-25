@@ -32,6 +32,11 @@
     box-shadow: -30px 0 80px rgb(0 0 0 / 50%);
   }
 
+  // Focused itself on open; only the box loses its ring, never the links.
+  &:focus {
+    outline: none;
+  }
+
   &::backdrop {
     background: color-mix(in srgb, var(--color-dark-deep) 72%, transparent);
     backdrop-filter: blur(8px);

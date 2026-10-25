@@ -138,10 +138,138 @@
   }
 }
 
+// Narrow-screen navigation: a full-screen sheet. Only ever opened modal, so
+// it sits in the top layer above the header whatever its z-index.
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100svh;
+  max-height: none;
+  margin: 0;
+  padding: 18px 22px 36px;
+  overflow-y: auto;
+  // Keep scrolling in the menu from chaining to the page (iOS).
+  overscroll-behavior: contain;
+  border: 0;
+  background: var(--color-dark);
+  color: var(--color-cream);
+
+  // Only while open: an author display would override the closed dialog's
+  // UA display: none.
+  // Focused itself on open; only the sheet loses its ring, never the links.
+  &:focus {
+    outline: none;
+  }
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.menu-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+}
+
+.menu-close {
+  display: inline-flex;
+  align-items: center;
+  // Flex items drop the space between the label and the ×.
+  gap: 0.5em;
+  min-height: 44px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--color-text-subtle);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+  }
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-link {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 10px 0;
+  color: var(--color-nav);
+  font-size: 36px;
+  font-weight: 200;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+  }
+}
+
+.menu-number {
+  color: color-mix(in srgb, var(--color-orange) 80%, transparent);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+}
+
+.menu-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-rule);
+  color: var(--color-text-subtle);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.menu-socials {
+  display: flex;
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-footer-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-orange);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .nav-link {
     transition:
       color 0.3s ease,
       text-decoration-color 0.3s ease;
+  }
+
+  .menu-close,
+  .menu-link,
+  .menu-footer-link {
+    transition: color 0.3s ease;
   }
 }

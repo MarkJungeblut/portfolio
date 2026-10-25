@@ -104,6 +104,10 @@ describe('ImpressumPage', () => {
       expect(dialog.open).toBe(true);
     });
 
+    it('focuses the dialog itself, not its Close link', () => {
+      expect(document.activeElement).toBe(dialog);
+    });
+
     it('stays on the route through the upgrade to modal', () => {
       expect(router.url).toBe('/impressum');
     });

@@ -9,14 +9,13 @@ left, full-bleed portrait on the right.
 
 ## Status
 
-**Header, home, profile, skills and portfolio sections and the Impressum
-overlay built.** The Nx workspace, the app shell and all library shells exist
-with boundaries enforced. The site header (`libs/ui`), the home, profile,
-skills and portfolio sections (`libs/features/home`, `libs/features/profile`,
-`libs/features/skills`, `libs/features/portfolio`) and the Impressum
-(`libs/features/impressum`) are done; the mobile menu overlay, scroll-spy and
-the contact section are still to come. Until the mobile menu exists, narrow
-screens have no link to the Impressum — the menu must carry one.
+**Header with mobile menu, home, profile, skills and portfolio sections and
+the Impressum overlay built.** The Nx workspace, the app shell and all library
+shells exist with boundaries enforced. The site header and its mobile menu
+(`libs/ui`), the home, profile, skills and portfolio sections
+(`libs/features/home`, `libs/features/profile`, `libs/features/skills`,
+`libs/features/portfolio`) and the Impressum (`libs/features/impressum`) are
+done; scroll-spy and the contact section are still to come.
 
 ## Stack
 
@@ -137,6 +136,10 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   `mj-section-heading` in `@portfolio/ui`; never rebuild them per section.
   Its `<section>` shell (id, focus target, padding, height) comes from
   `mj-page-section`; the section keeps only its content width.
+- **Mobile menu:** a modal `<dialog>` owned by `mj-site-header`, opened with
+  `showModal()` and never prerendered open. Its `close` event resets the
+  toggle; every link in it closes it before navigating. It carries the
+  narrow-screen link to the Impressum.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.
