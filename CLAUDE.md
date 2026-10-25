@@ -35,6 +35,7 @@ Decided, pinned to the latest *supported* versions (2026-10-17):
 | E2E | Playwright — decided, not set up yet (add with `nx g @nx/playwright:configuration`) |
 | Lint/format | ESLint (typescript-eslint + `@angular-eslint`) and Prettier |
 | Package manager | npm |
+| Hosting | Vercel, static output only (`framework: null`), configured in `vercel.json` — not the dashboard |
 
 ## Layout
 
