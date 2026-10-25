@@ -64,6 +64,9 @@ export class SiteHeader {
     // browsers throw on showModal() for an open dialog.
     if (menu.open) return;
     menu.showModal();
+    // Start on the menu, not its first link: Safari rings that link even
+    // after a tap. Tab still reaches it, with its ring.
+    menu.focus();
     this.menuOpen.set(true);
   }
 

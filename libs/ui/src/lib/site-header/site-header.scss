@@ -158,6 +158,11 @@
 
   // Only while open: an author display would override the closed dialog's
   // UA display: none.
+  // Focused itself on open; only the sheet loses its ring, never the links.
+  &:focus {
+    outline: none;
+  }
+
   &[open] {
     display: flex;
     flex-direction: column;

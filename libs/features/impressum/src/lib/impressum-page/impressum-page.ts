@@ -41,6 +41,9 @@ export class ImpressumPage {
       // showModal() throws on a dialog that is already open non-modally.
       dialog.close();
       dialog.showModal();
+      // Start on the dialog, not its first link: Safari rings that link even
+      // after a pointer click. Tab still reaches it, with its ring.
+      dialog.focus();
     });
   }
 

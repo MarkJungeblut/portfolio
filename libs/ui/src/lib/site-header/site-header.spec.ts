@@ -114,6 +114,12 @@ describe('SiteHeader', () => {
       expect(menuButton().getAttribute('aria-expanded')).toBe('true');
     });
 
+    it('focuses the menu itself, not its first link', async () => {
+      await openMenu();
+
+      expect(document.activeElement).toBe(menu());
+    });
+
     it('ignores a second tap, e.g. two replayed from before hydration', async () => {
       const showModalSpy = vi.spyOn(HTMLDialogElement.prototype, 'showModal');
       await openMenu();
