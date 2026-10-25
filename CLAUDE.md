@@ -140,6 +140,9 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   `showModal()` and never prerendered open. Its `close` event resets the
   toggle; every link in it closes it before navigating. It carries the
   narrow-screen link to the Impressum.
+- **Nav sections:** the header and mobile menu list Home, Profile, Skills and
+  Portfolio, never Contact. The mockup's Contact link was dropped on purpose
+  (Mark's call); don't add it back when building the Contact section.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.
   `@nx/angular` only allows Angular's official runner on buildable libs, so
   tests borrow the app's development build config instead.

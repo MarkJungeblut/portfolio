@@ -103,7 +103,6 @@ const SECTIONS: readonly NavSection[] = [
   { id: 'profile', label: 'Profile' },
   { id: 'skills', label: 'Skills' },
   { id: 'portfolio', label: 'Portfolio' },
-  { id: 'contact', label: 'Contact' },
 ];
 
 const HERO: HeroContent = {
