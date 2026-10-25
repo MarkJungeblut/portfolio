@@ -6,6 +6,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NavigationEnd,
   NavigationSkipped,
@@ -73,7 +74,7 @@ export function watchActiveSection(
 
     // Every navigation the router follows with an anchor scroll, including
     // a repeat click on the link already in the URL, which it skips.
-    const navigations = router.events
+    router.events
       .pipe(
         map((event) =>
           event instanceof NavigationEnd
@@ -84,6 +85,7 @@ export function watchActiveSection(
               : null,
         ),
         filter((url) => url !== null),
+        takeUntilDestroyed(destroyRef),
       )
       .subscribe((url) => {
         const target = router.parseUrl(url).fragment;
@@ -101,7 +103,6 @@ export function watchActiveSection(
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     destroyRef.onDestroy(() => {
-      navigations.unsubscribe();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       window.cancelAnimationFrame(frame);
