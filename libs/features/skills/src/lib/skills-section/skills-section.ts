@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PortfolioContent } from '@portfolio/data';
 import { PageSection, SectionHeading } from '@portfolio/ui';
 
-/** What Mark works with: a headline over four groups of skills. */
+/** What Mark works with: a headline over groups of skills. */
 @Component({
   selector: 'mj-skills-section',
   imports: [PageSection, SectionHeading],

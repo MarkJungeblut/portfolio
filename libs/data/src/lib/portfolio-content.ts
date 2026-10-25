@@ -48,7 +48,7 @@ export interface SkillGroup {
   readonly items: readonly string[];
 }
 
-/** What Mark works with, in four groups. */
+/** What Mark works with, grouped by area. */
 export interface SkillsContent {
   readonly eyebrow: string;
   readonly title: string;
@@ -178,6 +178,19 @@ const SKILLS: SkillsContent = {
         'Kubernetes',
         'Prometheus',
         'OpenTelemetry',
+      ],
+    },
+    {
+      label: 'AI',
+      items: [
+        'Spec-Driven Development',
+        'Context Engineering',
+        'Custom Agent Skills',
+        'Multi-Agent Orchestration',
+        'AI Code Review',
+        'Claude Code',
+        'GitHub Copilot',
+        'MCP',
       ],
     },
   ],
