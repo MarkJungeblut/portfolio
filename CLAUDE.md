@@ -147,7 +147,11 @@ Use `nx graph` to inspect the dependency graph when a boundary rule fires.
   (`watchActiveSection` in `apps/digital-portfolio/src/app/active-section.ts`,
   the mockup's 35%-of-viewport line) and passes it to `mj-site-header`, which
   marks that link `aria-current="location"` in both navs. Not on
-  `/impressum`, where only the Impressum link is current. It measures only
+  `/impressum`, where only the Impressum link is current. Following a
+  fragment link marks the target at once and holds it until the anchor scroll
+  has been quiet for 150 ms, so the sections passed on the way are never
+  marked. On wide screens one `.nav-indicator` slides to the current link;
+  each label's own border is the pre-hydration fallback. It measures only
   the ids it is given, today the nav sections: when Contact lands, pass every
   section id, or Portfolio stays marked while Contact is in view.
 - **Libraries are non-buildable** and generated with `--unitTestRunner=none`.

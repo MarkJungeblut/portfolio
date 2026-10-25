@@ -1,8 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
+  afterNextRender,
+  afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -20,6 +23,13 @@ import {
 import { filter } from 'rxjs';
 import type { ExternalLink, NavSection } from '@portfolio/utils';
 
+/** Where the indicator sits under the current link, relative to the nav. */
+interface IndicatorPosition {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+}
+
 /**
  * Fixed top bar: skip link, logo, section navigation and the menu toggle.
  *
@@ -30,7 +40,9 @@ import type { ExternalLink, NavSection } from '@portfolio/utils';
  * dialog alone.
  *
  * The section in view is marked current in both navigations, except while
- * the Impressum is open: then only its link is.
+ * the Impressum is open: then only its link is. On wide screens one
+ * indicator slides to whichever link is current; until the header can
+ * measure, each link draws its own rule.
  */
 @Component({
   selector: 'mj-site-header',
@@ -50,6 +62,9 @@ export class SiteHeader {
   protected readonly menuOpen = signal(false);
   private readonly menu =
     viewChild.required<ElementRef<HTMLDialogElement>>('menu');
+  private readonly nav = viewChild.required<ElementRef<HTMLElement>>('nav');
+  /** Bumped whenever the nav changes size: breakpoint, font swap. */
+  private readonly navResized = signal(0);
 
   private readonly router = inject(Router);
   private readonly onImpressum = isActive('/impressum', this.router, {
@@ -70,6 +85,55 @@ export class SiteHeader {
         takeUntilDestroyed(),
       )
       .subscribe(() => this.closeMenu());
+
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const observer = new ResizeObserver(() =>
+        this.navResized.update((n) => n + 1),
+      );
+      observer.observe(this.nav().nativeElement);
+      destroyRef.onDestroy(() => observer.disconnect());
+    });
+
+    afterRenderEffect({
+      earlyRead: () => {
+        // Whatever moves aria-current, or the links, moves the indicator.
+        this.currentSection();
+        this.navResized();
+        return this.indicatorPosition();
+      },
+      write: (position) => this.placeIndicator(position()),
+    });
+  }
+
+  /** Under the current link's label, or `null`: none, or the nav hidden. */
+  private indicatorPosition(): IndicatorPosition | null {
+    const nav = this.nav().nativeElement;
+    const label = nav.querySelector('[aria-current] > .nav-label');
+    const box = nav.getBoundingClientRect();
+    if (!label || box.width === 0) return null;
+    const rect = label.getBoundingClientRect();
+    return {
+      x: rect.left - box.left,
+      // On the label's bottom border, where its own rule would be.
+      y: rect.bottom - box.top - 1,
+      width: rect.width,
+    };
+  }
+
+  private placeIndicator(position: IndicatorPosition | null): void {
+    const nav = this.nav().nativeElement;
+    if (!position) {
+      nav.classList.remove('nav--sliding');
+      return;
+    }
+    nav.style.setProperty('--indicator-x', `${position.x}px`);
+    nav.style.setProperty('--indicator-y', `${position.y}px`);
+    nav.style.setProperty('--indicator-width', `${position.width}`);
+    if (nav.classList.contains('nav--sliding')) return;
+    nav.classList.add('nav--sliding');
+    // Animate from the next move on: the first placement appears in place.
+    requestAnimationFrame(() => nav.classList.add('nav--animated'));
   }
 
   /** Two-digit position of a menu item, e.g. "01". */

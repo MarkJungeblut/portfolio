@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { watchActiveSection } from './active-section';
+import { provideRouter, Router } from '@angular/router';
+import { ANCHOR_SCROLL_QUIET_MS, watchActiveSection } from './active-section';
+
+/** Waits out the quiet period that ends an anchor scroll. */
+const quiet = () =>
+  new Promise((resolve) => setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS + 50));
 
 @Component({
   template: `
@@ -45,6 +50,9 @@ describe('watchActiveSection', () => {
         return { top: tops[this.id] ?? 0 } as DOMRect;
       });
     layout(0, 800, 1600);
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: '**', children: [] }])],
+    });
     fixture = TestBed.createComponent(Host);
   });
 
@@ -106,6 +114,64 @@ describe('watchActiveSection', () => {
       scroll();
 
       expect(measure).not.toHaveBeenCalled();
+    });
+
+    describe('following a link to a section', () => {
+      const follow = (url: string) => TestBed.inject(Router).navigateByUrl(url);
+
+      it('marks the target at once', async () => {
+        await follow('/#skills');
+
+        expect(active()).toBe('skills');
+      });
+
+      it('skips the sections scrolled past on the way', async () => {
+        await follow('/#skills');
+        layout(-1000, -200, 600);
+        scroll();
+
+        expect(active()).toBe('skills');
+      });
+
+      it('follows the scroll again once it has gone quiet', async () => {
+        await follow('/#skills');
+        layout(-1000, -200, 600);
+        scroll();
+        await quiet();
+
+        expect(active()).toBe('profile');
+      });
+
+      it('keeps holding while the scroll goes on', async () => {
+        await follow('/#skills');
+        await new Promise((resolve) =>
+          setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS - 50),
+        );
+        layout(-1000, -200, 600);
+        scroll();
+        await new Promise((resolve) =>
+          setTimeout(resolve, ANCHOR_SCROLL_QUIET_MS - 50),
+        );
+
+        expect(active()).toBe('skills');
+      });
+
+      it('ignores a fragment that is not a section', async () => {
+        await follow('/#main');
+        layout(-1000, -200, 600);
+        scroll();
+
+        expect(active()).toBe('profile');
+      });
+
+      it('drops a pending hold once destroyed', async () => {
+        await follow('/#skills');
+        fixture.destroy();
+        await quiet();
+
+        // A stray measurement would find no sections left and clear it.
+        expect(active()).toBe('skills');
+      });
     });
   });
 });

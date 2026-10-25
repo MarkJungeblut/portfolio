@@ -7,6 +7,20 @@ const nextTask = () => new Promise((resolve) => setTimeout(resolve));
 
 const { showModal, close } = HTMLDialogElement.prototype;
 
+/** jsdom has no ResizeObserver; this one is triggered by hand. */
+class FakeResizeObserver {
+  static latest?: FakeResizeObserver;
+  constructor(readonly callback: () => void) {
+    FakeResizeObserver.latest = this;
+  }
+  observe(): void {
+    // Sizes only change when a test says so.
+  }
+  disconnect(): void {
+    // Nothing to release.
+  }
+}
+
 /** Text a screen reader announces: content minus `aria-hidden` parts. */
 const accessibleName = (el: Element) => {
   const copy = el.cloneNode(true) as Element;
@@ -19,6 +33,7 @@ describe('SiteHeader', () => {
   let element: HTMLElement;
 
   beforeEach(async () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
     // jsdom has no dialog behaviour. Mimic the browser: showModal() throws on
     // an open dialog (as older engines do), and close() fires its close event
     // as a queued task, only when the dialog was open.
@@ -52,6 +67,8 @@ describe('SiteHeader', () => {
   afterEach(() => {
     HTMLDialogElement.prototype.showModal = showModal;
     HTMLDialogElement.prototype.close = close;
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   const links = (scope: ParentNode) =>
@@ -150,6 +167,92 @@ describe('SiteHeader', () => {
       await fixture.whenStable();
 
       expect(current()).toEqual([[['Impressum', 'page']], []]);
+    });
+  });
+
+  describe('sliding indicator', () => {
+    const nav = () =>
+      element.querySelector<HTMLElement>('nav[aria-label="Main"]')!;
+
+    /** Label boxes in the wide nav, which itself starts at x = 100. */
+    let boxes: Record<string, Partial<DOMRect>>;
+
+    const position = () => ({
+      x: nav().style.getPropertyValue('--indicator-x'),
+      y: nav().style.getPropertyValue('--indicator-y'),
+      width: nav().style.getPropertyValue('--indicator-width'),
+    });
+    const sliding = () => nav().classList.contains('nav--sliding');
+
+    const showSection = async (id: string | null) => {
+      fixture.componentRef.setInput('activeSection', id);
+      await fixture.whenStable();
+    };
+
+    beforeEach(() => {
+      boxes = {
+        nav: { left: 100, top: 10, width: 600 },
+        Profile: { left: 120, bottom: 40, width: 50 },
+        Skills: { left: 200, bottom: 40, width: 40 },
+        Impressum: { left: 400, bottom: 40, width: 80 },
+      };
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+        function (this: Element) {
+          const key = this.matches('nav') ? 'nav' : this.textContent!.trim();
+          return {
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 0,
+            ...boxes[key],
+          } as DOMRect;
+        },
+      );
+    });
+
+    it('sits on the current link’s rule', async () => {
+      await showSection('skills');
+
+      expect(position()).toEqual({ x: '100px', y: '29px', width: '40' });
+      expect(sliding()).toBe(true);
+    });
+
+    it('moves to the next current link', async () => {
+      await showSection('skills');
+      await showSection('profile');
+
+      expect(position()).toEqual({ x: '20px', y: '29px', width: '50' });
+    });
+
+    it('moves to the Impressum while it is open', async () => {
+      await showSection('skills');
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(position()).toEqual({ x: '300px', y: '29px', width: '80' });
+    });
+
+    it('hides when no link is current', async () => {
+      await showSection('skills');
+      await showSection(null);
+
+      expect(sliding()).toBe(false);
+    });
+
+    it('stays hidden while the nav is, on narrow screens', async () => {
+      boxes['nav'] = { ...boxes['nav'], width: 0 };
+      await showSection('skills');
+
+      expect(sliding()).toBe(false);
+    });
+
+    it('follows the links when the nav changes size', async () => {
+      await showSection('skills');
+      boxes['Skills'] = { left: 260, bottom: 40, width: 44 };
+      FakeResizeObserver.latest!.callback();
+      await fixture.whenStable();
+
+      expect(position()).toEqual({ x: '160px', y: '29px', width: '44' });
     });
   });
 
