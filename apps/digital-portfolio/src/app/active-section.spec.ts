@@ -98,6 +98,19 @@ describe('watchActiveSection', () => {
     expect(active()).toBe('skills');
   });
 
+  it('marks a link followed while settling at once, and holds it', async () => {
+    render();
+    await TestBed.inject(Router).navigateByUrl('/#skills');
+    layout(-1000, -200, 600);
+    scroll();
+
+    expect(active()).toBe('skills');
+
+    wait(ANCHOR_SCROLL_QUIET_MS);
+
+    expect(active()).toBe('profile');
+  });
+
   describe('once settled', () => {
     beforeEach(() => {
       render();

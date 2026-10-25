@@ -41,8 +41,8 @@ interface IndicatorPosition {
  *
  * The section in view is marked current in both navigations, except while
  * the Impressum is open: then only its link is. On wide screens one
- * indicator slides to whichever link is current; until the header can
- * measure, each link draws its own rule.
+ * indicator slides to whichever link is current. Without JavaScript each
+ * link draws its own rule instead.
  */
 @Component({
   selector: 'mj-site-header',
@@ -165,7 +165,11 @@ export class SiteHeader {
     nav.style.setProperty('--indicator-width', `${position.width}`);
     nav.classList.add('nav--sliding');
     if (nav.classList.contains('nav--animated')) return;
+    // Apply the new place now, without transitions, so it can't land in the
+    // same style change as nav--animated, whatever task got us here.
+    nav.getBoundingClientRect();
     // Animate from the next move on.
+    cancelAnimationFrame(this.animateFrame);
     this.animateFrame = requestAnimationFrame(() =>
       nav.classList.add('nav--animated'),
     );

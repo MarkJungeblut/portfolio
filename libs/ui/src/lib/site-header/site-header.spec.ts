@@ -185,9 +185,14 @@ describe('SiteHeader', () => {
     const sliding = () => nav().classList.contains('nav--sliding');
     const animated = () => nav().classList.contains('nav--animated');
 
-    let frames: FrameRequestCallback[];
+    /** Queued animation frames, by id; cancelling one drops it. */
+    let frames: Map<number, FrameRequestCallback>;
     /** Runs the queued animation frames. */
-    const flushFrames = () => frames.splice(0).forEach((run) => run(0));
+    const flushFrames = () => {
+      const due = [...frames.values()];
+      frames.clear();
+      due.forEach((run) => run(0));
+    };
 
     const showSection = async (id: string | null) => {
       fixture.componentRef.setInput('activeSection', id);
@@ -195,10 +200,15 @@ describe('SiteHeader', () => {
     };
 
     beforeEach(() => {
-      frames = [];
-      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((run) =>
-        frames.push(run),
-      );
+      frames = new Map();
+      let lastFrame = 0;
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((run) => {
+        frames.set(++lastFrame, run);
+        return lastFrame;
+      });
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+        frames.delete(id);
+      });
       boxes = {
         nav: { left: 100, top: 10, width: 600 },
         Profile: { left: 120, bottom: 40, width: 50 },
@@ -289,6 +299,26 @@ describe('SiteHeader', () => {
       await showSection('profile');
 
       expect(animated()).toBe(true);
+    });
+
+    it('slides between a section and the Impressum', async () => {
+      await showSection('skills');
+      flushFrames();
+      await TestBed.inject(Router).navigateByUrl('/impressum');
+      await fixture.whenStable();
+
+      expect(position().x).toBe('300px');
+      expect(animated()).toBe(true);
+    });
+
+    it('stays still once hidden, however often the link changed before', async () => {
+      await showSection('skills');
+      await showSection('profile');
+      await showSection(null);
+      flushFrames();
+
+      // An orphaned frame from the first placement would turn motion on.
+      expect(animated()).toBe(false);
     });
 
     it('snaps, not slides, when only the layout moves its link, e.g. a font swap', async () => {
